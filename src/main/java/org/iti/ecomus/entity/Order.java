@@ -2,6 +2,7 @@ package org.iti.ecomus.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
@@ -38,6 +39,7 @@ public class Order implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
+    @NotEmpty
     private User user;
 
     public Order() {

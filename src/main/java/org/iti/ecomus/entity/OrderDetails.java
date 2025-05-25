@@ -1,6 +1,7 @@
 package org.iti.ecomus.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,6 +25,7 @@ public class OrderDetails implements Serializable {
     private Product product;
 
     @Column(name = "quantity", nullable = false)
+    @Min(1)
     private int quantity;
 
     @Column(name = "price", nullable = false)

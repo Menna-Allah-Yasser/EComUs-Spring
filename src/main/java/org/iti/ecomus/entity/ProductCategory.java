@@ -15,6 +15,7 @@ public class ProductCategory implements Serializable {
     @EmbeddedId
     private ProductCategoryPK id;
 
+
     @ManyToOne
     @JoinColumn(name = "productId", insertable = false, updatable = false)
     private Product product;

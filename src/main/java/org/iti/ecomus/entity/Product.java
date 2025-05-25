@@ -1,6 +1,8 @@
 package org.iti.ecomus.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,28 +19,24 @@ public class Product implements Serializable {
     private int productId;
 
     @Column(name = "productName", nullable = false)
+    @NotEmpty
     private String productName;
 
     @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "quantity", nullable = false)
+    @Min(0)
     private int quantity;
 
     @Column(name = "price", nullable = false)
+    @Min(1)
     private int price;
 
-    //    @Transient
-    @ManyToMany
-    @JoinTable(
-            name = "productcategory",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "categoryId")
-    )
+    @ManyToMany(mappedBy = "products") // "products" is the name of the field in Category
     private List<Category> categories;
 
-    public Product() {
-    }
+    public Product() {}
 
     public Product(String productName, String description, int quantity, int price) {
         this.productName = productName;
@@ -46,6 +44,4 @@ public class Product implements Serializable {
         this.quantity = quantity;
         this.price = price;
     }
-
-
 }

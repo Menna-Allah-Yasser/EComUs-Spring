@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Objects;
-// @Embeddable
 @Data
 public class CartPK implements Serializable {
 
