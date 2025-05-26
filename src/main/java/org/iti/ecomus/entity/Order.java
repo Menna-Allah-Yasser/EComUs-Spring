@@ -1,6 +1,5 @@
 package org.iti.ecomus.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -9,6 +8,7 @@ import org.iti.ecomus.enums.PayType;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -42,6 +42,9 @@ public class Order implements Serializable {
     @NotEmpty
     private User user;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<OrderDetails> orderDetails;
+
     public Order() {
     }
 
@@ -54,6 +57,4 @@ public class Order implements Serializable {
         this.user = user;
     }
 
-
 }
-

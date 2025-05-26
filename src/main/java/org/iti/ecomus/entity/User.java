@@ -32,7 +32,7 @@ public class User implements Serializable {
     @NotEmpty
     private String password;
 
-    @Column(name = "BD")
+    @Column(name = "birthdate")
     private Date BD;
 
     @Column(name = "job")
@@ -58,6 +58,13 @@ public class User implements Serializable {
             orphanRemoval = true ,
             fetch = FetchType.LAZY)
     private List<Order> orders;
+
+        @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true ,
+            fetch = FetchType.LAZY)
+    private List<Cart> carts;
+
 
     public User() {
     }
