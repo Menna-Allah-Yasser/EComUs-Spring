@@ -1,4 +1,4 @@
-package org.iti.ecomus.repository.impl;
+package org.iti.ecomus.repository;
 
 import com.sun.jdi.InterfaceType;
 import org.iti.ecomus.entity.User;
