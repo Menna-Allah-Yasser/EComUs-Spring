@@ -10,10 +10,10 @@ import java.util.Objects;
 @Data
 public class WishlistPK implements Serializable {
 
-    private int userId;
-    private int productId;
+    private Long userId;
+    private Long productId;
 
-    public WishlistPK(int userId, int productId) {
+    public WishlistPK(Long userId, Long productId) {
         this.userId = userId;
         this.productId = productId;
     }

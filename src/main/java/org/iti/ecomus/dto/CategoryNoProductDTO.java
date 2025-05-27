@@ -1,6 +1,5 @@
 package org.iti.ecomus.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartDTO {
+public class CategoryNoProductDTO {
+    private Long categoryId;
 
-    private ProductDTO product;
-
-    private int quantity;
-
+    private String categoryName;
 
 }

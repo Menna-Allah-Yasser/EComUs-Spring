@@ -12,5 +12,5 @@ import java.lang.annotation.*;
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Transactional
-public @interface IntegTest {
+public @interface IntegrationTest {
 }

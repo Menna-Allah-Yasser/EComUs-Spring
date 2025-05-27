@@ -13,11 +13,11 @@ public class Wishlist implements Serializable {
 
     @Id
     @Column(name = "userId")
-    private int userId;
+    private Long userId;
 
     @Id
     @Column(name = "productId")
-    private int productId;
+    private Long productId;
 
     @ManyToOne
     @JoinColumn(name = "productId", insertable = false, updatable = false)
@@ -30,7 +30,7 @@ public class Wishlist implements Serializable {
     public Wishlist() {
     }
 
-    public Wishlist(int productId, Product product, User user) {
+    public Wishlist(Long productId, Product product, User user) {
         this.productId = productId;
         this.product = product;
         this.user = user;

@@ -12,11 +12,11 @@ import java.util.Objects;
 @Data
 public class ProductCategoryPK implements Serializable {
 
-    private int productId;
-    private int categoryId;
+    private Long productId;
+    private Long categoryId;
 
 
-    public ProductCategoryPK(int productId, int categoryId) {
+    public ProductCategoryPK(Long productId, Long categoryId) {
         this.productId = productId;
         this.categoryId = categoryId;
     }

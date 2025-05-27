@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 public class AddressDTO {
 
-    private int id;
+    private Long id;
 
     private String city;
 
