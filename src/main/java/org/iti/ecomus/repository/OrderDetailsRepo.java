@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderDetailsRepo extends JpaRepository<OrderDetails, Long> {
 
-    List<OrderDetails> findOrderDetailsByOrderId(Long orderId);
-    Integer deleteOrderDetailsByOrderId(Long orderId);
+    List<OrderDetails> findOrderDetailsByOrderOrderId(Long orderId);
+    Integer deleteOrderDetailsByOrderOrderId(Long orderId);
 
 }
