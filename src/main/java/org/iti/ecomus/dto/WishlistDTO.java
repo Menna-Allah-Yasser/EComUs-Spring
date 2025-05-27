@@ -1,4 +1,4 @@
 package org.iti.ecomus.dto;
 
-public class UserDto {
+public class WishlistDTO {
 }
