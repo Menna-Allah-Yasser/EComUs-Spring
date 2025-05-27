@@ -8,6 +8,7 @@ import org.iti.ecomus.entity.Product;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -16,13 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDetailsDTO {
 
-    private int orderDetailsId;
+    private Long orderDetailsId;
 
     private ProductDTO product;
 
     private int quantity;
 
-    private int price;
+    private BigDecimal price;
 
 
 }

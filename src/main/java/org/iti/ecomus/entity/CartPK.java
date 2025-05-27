@@ -7,13 +7,13 @@ import java.util.Objects;
 @Data
 public class CartPK implements Serializable {
 
-    private int userId;
-    private int productId;
+    private Long userId;
+    private Long productId;
 
     public CartPK() {
     }
 
-    public CartPK(int userId, int productId) {
+    public CartPK(Long userId, Long productId) {
         this.userId = userId;
         this.productId = productId;
     }

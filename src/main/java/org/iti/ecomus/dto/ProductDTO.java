@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductDTO {
 
-    private int productId;
+    private Long productId;
 
     private String productName;
 
@@ -20,7 +21,7 @@ public class ProductDTO {
 
     private int quantity;
 
-    private int price;
+    private BigDecimal price;
 
-    private List<CategoryDTO> categories;
+    private List<CategoryNoProductDTO> categories;
 }

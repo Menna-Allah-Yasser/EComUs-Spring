@@ -7,6 +7,7 @@ import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -18,13 +19,13 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderId")
-    private int orderId;
+    private Long orderId;
 
     @Column(name = "address", nullable = false)
     private String address;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private BigDecimal price;
 
     @Column(name = "date", nullable = false)
     private Date date;
@@ -48,7 +49,7 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(String address, int price, Date date, OrderStatus status, PayType payType, User user) {
+    public Order(String address, BigDecimal price, Date date, OrderStatus status, PayType payType, User user) {
         this.address = address;
         this.price = price;
         this.date = date;

@@ -14,11 +14,11 @@ public class Cart implements Serializable {
 
     @Id
     @Column(name = "userId")
-    private int userId;
+    private Long userId;
 
     @Id
     @Column(name = "productId")
-    private int productId;
+    private Long productId;
 
     @Column(name = "quantity")
     private int quantity;
@@ -34,7 +34,7 @@ public class Cart implements Serializable {
     public Cart() {
     }
 
-    public Cart( int productId, int quantity, Product product, User user) {
+    public Cart( Long productId, int quantity, Product product, User user) {
         this.productId = productId;
         this.quantity = quantity;
         this.product = product;

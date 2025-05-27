@@ -5,6 +5,8 @@ import lombok.*;
 import org.iti.ecomus.entity.OrderDetails;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
-    private int orderId;
+    private Long orderId;
 
     private String address;
 
-    private int price;
+    private BigDecimal price;
 
     private Date date;
 

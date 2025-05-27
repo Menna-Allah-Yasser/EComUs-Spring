@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "orderdetails")
@@ -14,7 +15,7 @@ public class OrderDetails implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderDetailsId")
-    private int orderDetailsId;
+    private Long orderDetailsId;
 
     @ManyToOne
     @JoinColumn(name = "orderId", nullable = false)
@@ -29,12 +30,12 @@ public class OrderDetails implements Serializable {
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private BigDecimal price;
 
     public OrderDetails() {
     }
 
-    public OrderDetails(Order order, Product product, int quantity, int price) {
+    public OrderDetails(Order order, Product product, int quantity, BigDecimal price) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;
