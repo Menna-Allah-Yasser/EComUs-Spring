@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductCategoryRepo extends JpaRepository<ProductCategory, Long> {
 
-    int countProductsByCategoryId(Long categoryId);
+    int countProductsByCategory_CategoryId(Long categoryId);
 }
