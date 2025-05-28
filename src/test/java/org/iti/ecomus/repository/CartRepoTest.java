@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.iti.ecomus.annotation.IntegrationTest;
 import org.iti.ecomus.entity.Cart;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @IntegrationTest
 public class CartRepoTest {
@@ -96,35 +96,35 @@ public class CartRepoTest {
 
 
 // Test Method 5: deleteByUserUserIdAndProductProductId
-// @Test
+ @Test
 
-// void testDeleteByUserUserIdAndProductProductId() {
-//     Long userId = 1L;
-//     Long productId = 19L; 
+ void testDeleteByUserUserIdAndProductProductId() {
+     Long userId = 1L;
+     Long productId = 19L;
     
-//     System.out.println("=== Test deleteByUserUserIdAndProductProductId ===");
+     System.out.println("=== Test deleteByUserUserIdAndProductProductId ===");
     
-//     Cart existingCart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
+     Cart existingCart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
     
-//     if (existingCart != null) {
-//         System.out.println("Cart item found before deletion:");
-//         System.out.println("- Product: " + existingCart.getProduct().getProductName() + 
-//                          ", Quantity: " + existingCart.getQuantity());
+     if (existingCart != null) {
+         System.out.println("Cart item found before deletion:");
+         System.out.println("- Product: " + existingCart.getProduct().getProductName() +
+                          ", Quantity: " + existingCart.getQuantity());
         
     
-//         cartRepo.deleteByUserUserIdAndProductProductId(userId, productId);
+         cartRepo.deleteByUserUserIdAndProductProductId(userId, productId);
         
-//         System.out.println("Delete method executed");
+         System.out.println("Delete method executed");
 
-//         Cart deletedCart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
-//         assertNull(deletedCart, "Cart item should be deleted");
-//         System.out.println(" Deletion successful - item no longer exists in cart");
+         Cart deletedCart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
+         assertNull(deletedCart, "Cart item should be deleted");
+         System.out.println(" Deletion successful - item no longer exists in cart");
         
-//     } else {
-//         System.out.println("No cart item found for User ID: " + userId + " and Product ID: " + productId);
-//         System.out.println("Please make sure this combination exists in your database before running the test");
-//         fail("Test requires existing cart item to verify deletion");
-//     }
-// }
+     } else {
+         System.out.println("No cart item found for User ID: " + userId + " and Product ID: " + productId);
+         System.out.println("Please make sure this combination exists in your database before running the test");
+         fail("Test requires existing cart item to verify deletion");
+     }
+ }
 
 }
