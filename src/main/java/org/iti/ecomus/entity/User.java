@@ -1,14 +1,22 @@
 package org.iti.ecomus.entity;
 
 // todo --> password hash
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.Data;
-
-
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 
 @Entity
 @Table(name = "user")
@@ -49,7 +57,6 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
-            orphanRemoval = true ,
             fetch = FetchType.LAZY)
     private List<Address> addresses;
 
@@ -60,8 +67,8 @@ public class User implements Serializable {
     private List<Order> orders;
 
         @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true ,
+        cascade =CascadeType.ALL,
+orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<Cart> carts;
 
