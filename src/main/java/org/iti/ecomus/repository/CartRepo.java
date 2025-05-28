@@ -1,7 +1,25 @@
 package org.iti.ecomus.repository;
 
-import org.iti.ecomus.entity.Cart;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-public interface CartRepo extends JpaRepository<Cart, Long> {
+import org.iti.ecomus.entity.Cart;
+import org.iti.ecomus.entity.CartPK;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+
+public interface CartRepo extends JpaRepository<Cart, CartPK> {
+
+    List<Cart> findByUserUserId(Long userId);
+
+    Cart findByUserUserIdAndProductProductId(Long userId, Long productId); 
+
+    @Modifying
+    void deleteByUserUserIdAndProductProductId(Long userId, Long productId);
+
+    @Query("SELECT SUM(c.quantity) FROM Cart c WHERE c.user.userId = :userId")
+    Integer getTotalQuantityByUserId(Long userId);
+
+    @Query("SELECT SUM(c.quantity * c.product.price) FROM Cart c WHERE c.user.userId = :userId")
+    Integer calculateCartTotal(Long userId);
 }
