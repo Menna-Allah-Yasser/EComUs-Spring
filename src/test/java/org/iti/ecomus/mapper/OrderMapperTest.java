@@ -51,7 +51,7 @@ public class OrderMapperTest {
         product.setCategories(Arrays.asList(category));
 
         List<OrderDetails> orderDetailsList = List.of(
-                new OrderDetails(order, product, 2, new BigDecimal("49.99"))
+                new OrderDetails(1L,order, product, 2, new BigDecimal("49.99"))
         );
         order.setOrderDetails(orderDetailsList);
         // When

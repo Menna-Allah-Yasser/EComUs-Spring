@@ -1,5 +1,7 @@
 package org.iti.ecomus.util;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.iti.ecomus.service.impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,4 +87,19 @@ public class MailMessenger {
         }
     }
 
+    public void orderCompleted(String username, @Email @NotEmpty String email, String string, String string1) {
+        String subject = "Order Completed - Thank You for Shopping with Ecommus!";
+        String body = "Hi " + username
+                + ",<p>We are delighted to inform you that your order has been successfully completed. Thank you for choosing Ecommus for your shopping needs!</p>"
+                + "<p>Order Details: <br>" + "Order Number: " + string + "<br>Order Date: " + string1 + "</p>"
+                + "<p>We hope you are satisfied with your purchase and that it meets your expectations. Your trust in Ecommus means a lot to us, and we strive to provide you with an exceptional shopping experience.</p>"
+                + "<p>If you have any questions or need assistance, please don't hesitate to reach out to our customer support team. We are here to help!</p>"
+                + "<p>Thank you once again for shopping with us! We look forward to serving you again in the future.</p>";
+        try {
+            Mail.sendSimpleEmail(email, subject, body);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e.getClass());
+
+        }
+    }
 }

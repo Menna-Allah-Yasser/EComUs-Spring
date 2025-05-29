@@ -36,7 +36,7 @@ CREATE TABLE `orders` (
                           `date` datetime(6) NOT NULL,
                           `payType` enum('CASH','CREDIT') NOT NULL,
                           `price` integer NOT NULL,
-                          `status` enum('CANCELED','COMPLETED','PROCESSING') NOT NULL,
+                          `status` enum('CANCELED','SHIPPED','COMPLETED','PROCESSING') NOT NULL,
                           `userId` integer NOT NULL,
                           PRIMARY KEY (`orderId`)
 ) ENGINE=InnoDB;
