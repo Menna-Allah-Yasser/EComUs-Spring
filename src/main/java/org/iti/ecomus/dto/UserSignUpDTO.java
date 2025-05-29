@@ -1,25 +1,18 @@
 package org.iti.ecomus.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.iti.ecomus.entity.Cart;
-import org.iti.ecomus.enums.UserRole;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-
-    private Long userId;
+public class UserSignUpDTO {
 
     private String userName;
 
@@ -27,6 +20,7 @@ public class UserDTO {
 
     private String password;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date BD;
 
     private String job;
@@ -37,14 +31,5 @@ public class UserDTO {
 
     private String phone;
 
-    private UserRole role;
-
-    private List<AddressDTO> addresses;
-
-
-    private List<OrderDTO> orders;
-
-
-    private List<CartDTO> carts;
-
 }
+
