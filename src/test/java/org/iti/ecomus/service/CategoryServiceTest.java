@@ -2,8 +2,7 @@ package org.iti.ecomus.service;
 
 import org.iti.ecomus.dto.CategoryDTO;
 import org.iti.ecomus.entity.Category;
-import org.iti.ecomus.exceptions.ConflictException;
-import org.iti.ecomus.exceptions.ResourceNotFoundException;
+import org.iti.ecomus.exceptions.*;
 import org.iti.ecomus.mappers.CategoryMapper;
 import org.iti.ecomus.repository.CategoryRepo;
 import org.iti.ecomus.service.impl.CategoryService;
@@ -73,7 +72,7 @@ public class CategoryServiceTest {
 
         @Test
         void testGetCategoryById_NullIdThrowsException() {
-            assertThrows(IllegalArgumentException.class, () -> categoryService.getCategoryById(null));
+            assertThrows(BadRequestException.class, () -> categoryService.getCategoryById(null));
         }
     }
 
@@ -92,21 +91,21 @@ public class CategoryServiceTest {
 
         @Test
         void testAddCategory_NullDto_ThrowsException() {
-            assertThrows(IllegalArgumentException.class, () -> categoryService.addCategory(null));
+            assertThrows(BadRequestException.class, () -> categoryService.addCategory(null));
         }
 
         @Test
         void testAddCategory_NullName_ThrowsException() {
             CategoryDTO dto = new CategoryDTO();
             dto.setCategoryName(null);
-            assertThrows(IllegalArgumentException.class, () -> categoryService.addCategory(dto));
+            assertThrows(BadRequestException.class, () -> categoryService.addCategory(dto));
         }
 
         @Test
         void testAddCategory_BlankName_ThrowsException() {
             CategoryDTO dto = new CategoryDTO();
             dto.setCategoryName("   ");
-            assertThrows(IllegalArgumentException.class, () -> categoryService.addCategory(dto));
+            assertThrows(BadRequestException.class, () -> categoryService.addCategory(dto));
         }
 
         @Test
@@ -123,7 +122,7 @@ public class CategoryServiceTest {
 
         @Test
         void testUpdateCategory_NullDto_ThrowsException() {
-            assertThrows(IllegalArgumentException.class, () -> categoryService.updateCategory(null));
+            assertThrows(BadRequestException.class, () -> categoryService.updateCategory(null));
         }
 
         @Test
@@ -131,7 +130,7 @@ public class CategoryServiceTest {
             CategoryDTO dto = new CategoryDTO();
             dto.setCategoryId(null);
             dto.setCategoryName("ValidName");
-            assertThrows(IllegalArgumentException.class, () -> categoryService.updateCategory(dto));
+            assertThrows(BadRequestException.class, () -> categoryService.updateCategory(dto));
         }
 
         @Test
@@ -139,7 +138,7 @@ public class CategoryServiceTest {
             CategoryDTO dto = new CategoryDTO();
             dto.setCategoryId(category.getCategoryId());
             dto.setCategoryName("   ");
-            assertThrows(IllegalArgumentException.class, () -> categoryService.updateCategory(dto));
+            assertThrows(BadRequestException.class, () -> categoryService.updateCategory(dto));
         }
 
         @Test
