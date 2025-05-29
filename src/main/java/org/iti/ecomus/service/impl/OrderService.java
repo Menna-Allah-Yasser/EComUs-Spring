@@ -41,7 +41,7 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderDTO> getOrdersByUserId(Long userId) {
 
-        List<Order> orders = orderRepo.findByUserId(userId);
+        List<Order> orders = orderRepo.findByUser_UserId(userId);
 
         List<OrderDTO> orderDTOs = orderMapper.toOrderDTO(orders);
 
