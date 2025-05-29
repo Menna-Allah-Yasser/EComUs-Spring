@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -104,5 +105,13 @@ public class OrderMapperTest {
         assertEquals(date, order.getDate());
         assertEquals(PayType.CASH, order.getPayType());
         assertEquals("789 Oak St, City, Country", order.getAddress());
+    }
+
+    @Test
+    void notnull(){
+        List<Order> orders= new ArrayList<>();
+        List<OrderDTO> orderDTOS = orderMapper.toOrderDTO(orders);
+        assertNotNull(orderDTOS);
+        assertTrue(orderDTOS.isEmpty(), "The list should be empty when no orders are provided");
     }
 }
