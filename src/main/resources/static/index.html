@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Authentication Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .token-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>JWT Authentication Test</h1>
+
+    <!-- Login Form -->
+    <div id="loginSection">
+        <h2>Login</h2>
+        <div class="form-group">
+            <label for="serverUrl">Server URL:</label>
+            <input type="text" id="serverUrl" value="http://localhost:8080" placeholder="http://localhost:8080">
+        </div>
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter password">
+        </div>
+        <button onclick="login()">Login</button>
+        <div id="loginResponse" class="response hidden"></div>
+    </div>
+
+    <!-- Token Section -->
+    <div id="tokenSection" class="token-section hidden">
+        <h3>Stored Token</h3>
+        <textarea id="storedToken" rows="3" placeholder="JWT token will appear here..." readonly></textarea>
+        <button onclick="clearToken()">Clear Token</button>
+    </div>
+
+    <!-- API Test Section -->
+    <div id="apiSection" class="hidden">
+        <h2>Test API Endpoints</h2>
+        <div class="form-group">
+            <label for="apiEndpoint">API Endpoint:</label>
+            <input type="text" id="apiEndpoint" value="/api/users/all" placeholder="/api/users/all">
+        </div>
+        <button onclick="testAPI()">Test API</button>
+        <button onclick="testPublicAPI()">Test Public Endpoint</button>
+        <div id="apiResponse" class="response hidden"></div>
+    </div>
+</div>
+
+<script>
+    let jwtToken = '';
+
+    async function login() {
+        const serverUrl = document.getElementById('serverUrl').value.trim();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!serverUrl || !username || !password) {
+            showResponse('loginResponse', 'Please fill in all fields', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${serverUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userName: username,  // Changed from 'username' to 'userName'
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Assuming your login endpoint returns {accessToken: "...", refreshToken: "..."}
+                jwtToken = data.accessToken || data.token || data.jwt;
+
+                if (jwtToken) {
+                    document.getElementById('storedToken').value = jwtToken;
+                    document.getElementById('tokenSection').classList.remove('hidden');
+                    document.getElementById('apiSection').classList.remove('hidden');
+                    showResponse('loginResponse', `Login successful!\nToken: ${jwtToken.substring(0, 50)}...`, 'success');
+                } else {
+                    showResponse('loginResponse', `Login successful but no token found in response:\n${JSON.stringify(data, null, 2)}`, 'error');
+                }
+            } else {
+                showResponse('loginResponse', `Login failed:\n${JSON.stringify(data, null, 2)}`, 'error');
+            }
+        } catch (error) {
+            showResponse('loginResponse', `Network error: ${error.message}`, 'error');
+        }
+    }
+
+    async function testAPI() {
+        if (!jwtToken) {
+            showResponse('apiResponse', 'Please login first to get a JWT token', 'error');
+            return;
+        }
+
+        const serverUrl = document.getElementById('serverUrl').value.trim();
+        const endpoint = document.getElementById('apiEndpoint').value.trim();
+
+        try {
+            const response = await fetch(`${serverUrl}${endpoint}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showResponse('apiResponse', `API call successful (${response.status}):\n${JSON.stringify(data, null, 2)}`, 'success');
+            } else {
+                showResponse('apiResponse', `API call failed (${response.status}):\n${JSON.stringify(data, null, 2)}`, 'error');
+            }
+        } catch (error) {
+            showResponse('apiResponse', `Network error: ${error.message}`, 'error');
+        }
+    }
+
+    async function testPublicAPI() {
+        const serverUrl = document.getElementById('serverUrl').value.trim();
+
+        try {
+            const response = await fetch(`${serverUrl}/api/public/test`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const data = await response.text();
+
+            if (response.ok) {
+                showResponse('apiResponse', `Public API call successful (${response.status}):\n${data}`, 'success');
+            } else {
+                showResponse('apiResponse', `Public API call failed (${response.status}):\n${data}`, 'error');
+            }
+        } catch (error) {
+            showResponse('apiResponse', `Network error: ${error.message}`, 'error');
+        }
+    }
+
+    function clearToken() {
+        jwtToken = '';
+        document.getElementById('storedToken').value = '';
+        document.getElementById('tokenSection').classList.add('hidden');
+        document.getElementById('apiSection').classList.add('hidden');
+        showResponse('loginResponse', 'Token cleared', 'success');
+    }
+
+    function showResponse(elementId, message, type) {
+        const element = document.getElementById(elementId);
+        element.textContent = message;
+        element.className = `response ${type}`;
+        element.classList.remove('hidden');
+    }
+
+    // Auto-fill for testing (remove in production)
+    document.getElementById('username').value = 'john_doe2';
+    document.getElementById('password').value = 'securePassword123';
+</script>
+</body>
+</html>
