@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -91,6 +91,64 @@ public class CategoryMapperTest {
         assertEquals(1, productDTO.getCategories().size());
         assertEquals(1L, productDTO.getCategories().get(0).getCategoryId());
         assertEquals("ELECTRONICS", productDTO.getCategories().get(0).getCategoryName());
+    }
+
+    @Test
+    void testToCategoryDTOList() {
+        // Given
+        Category category1 = new Category();
+        category1.setCategoryId(1L);
+        category1.setCategoryName("ELECTRONICS");
+
+        Category category2 = new Category();
+        category2.setCategoryId(2L);
+        category2.setCategoryName("BOOKS");
+
+        List<Category> categories = Arrays.asList(category1, category2);
+
+        // When
+        List<CategoryDTO> dtos = categoryMapper.toDtoList(categories);
+
+        // Then
+        assertNotNull(dtos);
+        assertEquals(2, dtos.size());
+
+        CategoryDTO dto1 = dtos.get(0);
+        assertEquals(1L, dto1.getCategoryId());
+        assertEquals("ELECTRONICS", dto1.getCategoryName());
+
+        CategoryDTO dto2 = dtos.get(1);
+        assertEquals(2L, dto2.getCategoryId());
+        assertEquals("BOOKS", dto2.getCategoryName());
+    }
+
+    @Test
+    void testToCategoryEntityList() {
+        // Given
+        CategoryDTO dto1 = new CategoryDTO();
+        dto1.setCategoryId(10L);
+        dto1.setCategoryName("TOYS");
+
+        CategoryDTO dto2 = new CategoryDTO();
+        dto2.setCategoryId(20L);
+        dto2.setCategoryName("FURNITURE");
+
+        List<CategoryDTO> dtos = Arrays.asList(dto1, dto2);
+
+        // When
+        List<Category> entities = categoryMapper.toCategoryList(dtos);
+
+        // Then
+        assertNotNull(entities);
+        assertEquals(2, entities.size());
+
+        Category entity1 = entities.get(0);
+        assertEquals(10L, entity1.getCategoryId());
+        assertEquals("TOYS", entity1.getCategoryName());
+
+        Category entity2 = entities.get(1);
+        assertEquals(20L, entity2.getCategoryId());
+        assertEquals("FURNITURE", entity2.getCategoryName());
     }
 
 }

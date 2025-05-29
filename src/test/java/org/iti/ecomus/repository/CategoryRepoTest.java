@@ -3,53 +3,59 @@ package org.iti.ecomus.repository;
 import org.iti.ecomus.entity.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class CategoryRepoTest {
+@SpringBootTest
+@Transactional
+public class CategoryRepoTest {
 
+    @Autowired
     private CategoryRepo categoryRepo;
 
     @BeforeEach
     void setUp() {
-        categoryRepo = mock(CategoryRepo.class);
+        Category cat1 = new Category();
+        cat1.setCategoryName("Electronics1");
+
+        Category cat2 = new Category();
+        cat2.setCategoryName("Books1");
+
+        categoryRepo.save(cat1);
+        categoryRepo.save(cat2);
+    }
+
+    @Test
+    void testFindByName_ShouldReturnCorrectCategory() {
+        Category found = categoryRepo.getCategoryByCategoryName("Electronics1");
+        assertNotNull(found);
+        assertEquals("Electronics1", found.getCategoryName());
     }
 
     @Test
     void testFindAllCategoryIdsByCategoryName() {
         // Arrange
-        List<String> names = Arrays.asList("Electronics", "Books");
-        List<Integer> expectedIds = Arrays.asList(1, 2);
+        Category cat1 = new Category();
+        cat1.setCategoryName("Clothing1");
 
-        when(categoryRepo.findAllCategoryIdsByCategoryName(names)).thenReturn(expectedIds);
 
-        // Act
-        List<Integer> actualIds = categoryRepo.findAllCategoryIdsByCategoryName(names);
+        Category cat2 = new Category();
+        cat2.setCategoryName("Home1");
 
-        // Assert
-        assertEquals(expectedIds, actualIds);
-        verify(categoryRepo).findAllCategoryIdsByCategoryName(names);
-    }
-
-    @Test
-    void testGetCategoryByCategoryName() {
-        // Arrange
-        Category category = new Category();
-        category.setCategoryId(1L);
-        category.setCategoryName("Books");
-
-        when(categoryRepo.getCategoryByCategoryName("Books")).thenReturn(category);
+        categoryRepo.save(cat1);
+        categoryRepo.save(cat2);
 
         // Act
-        Category result = categoryRepo.getCategoryByCategoryName("Books");
+        List<Long> ids = categoryRepo.findAllCategoryIdsByCategoryName(List.of("Clothing1", "Home1"));
 
         // Assert
-        assertNotNull(result);
-        assertEquals("Books", result.getCategoryName());
-        assertEquals(1, result.getCategoryId());
-        verify(categoryRepo).getCategoryByCategoryName("Books");
+        assertEquals(2, ids.size());
+        assertTrue(ids.contains(cat1.getCategoryId()));
+        assertTrue(ids.contains(cat2.getCategoryId()));
     }
 }

@@ -4,54 +4,54 @@ import org.iti.ecomus.entity.Address;
 import org.iti.ecomus.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
+@Transactional
 class AddressRepoTest {
 
+    @Autowired
     private AddressRepo addressRepo;
 
+    @Autowired
+    private UserRepo userRepo;
+
+    private User testUser;
+
     @BeforeEach
-    void setUp() {
-        addressRepo = mock(AddressRepo.class);
+    void setup() {
+        // Save test user with all required fields
+        testUser = new User();
+        testUser.setUserName("John Doe");
+        testUser.setEmail("john@example.com");
+        testUser.setPassword("123456");
+
+        userRepo.save(testUser);
+
+        // Save addresses
+        Address a1 = new Address();
+        a1.setArea("Downtown");
+        a1.setUser(testUser);
+
+        Address a2 = new Address();
+        a2.setArea("Suburb");
+        a2.setUser(testUser);
+
+        addressRepo.save(a1);
+        addressRepo.save(a2);
     }
 
     @Test
-    void testFindAddressByUserUserId() {
-        // Arrange
-        Long userId = 1L;
-
-        User user = new User();
-        user.setUserId(userId);
-        user.setUserName("John Doe");
-
-        Address address1 = new Address();
-        address1.setId(101L);
-        address1.setArea("Downtown");
-        address1.setUser(user);
-
-        Address address2 = new Address();
-        address2.setId(102L);
-        address2.setArea("Uptown");
-        address2.setUser(user);
-
-        List<Address> mockAddresses = List.of(address1, address2);
-
-        when(addressRepo.findAddressByUserUserId(userId)).thenReturn(mockAddresses);
-
-        // Act
-        List<Address> result = addressRepo.findAddressByUserUserId(userId);
-
-        // Assert
+    void testFindAddressByUserUserId_ReturnsCorrectAddresses() {
+        List<Address> result = addressRepo.findAddressByUserUserId(testUser.getUserId());
         assertEquals(2, result.size());
-        result.forEach(addr -> {
-            assertEquals(userId, addr.getUser().getUserId());
-            assertNotNull(addr.getArea());
-        });
-
-        verify(addressRepo, times(1)).findAddressByUserUserId(userId);
+        assertTrue(result.stream().anyMatch(a -> a.getArea().equals("Downtown")));
+        assertTrue(result.stream().anyMatch(a -> a.getArea().equals("Suburb")));
     }
 }
