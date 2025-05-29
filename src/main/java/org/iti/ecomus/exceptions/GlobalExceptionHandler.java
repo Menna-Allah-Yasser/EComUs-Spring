@@ -12,6 +12,29 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(CartEmptyException.class)
+    ResponseEntity<ErrorResponseDTO> handleCartEmpty(CartEmptyException ex, HttpServletRequest request) {
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                400,
+                "Bad Request");
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(OrderNotFoundException.class)
+    ResponseEntity<ErrorResponseDTO> handleOrderNotFound(OrderNotFoundException ex, HttpServletRequest request) {
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getRequestURI(),
+                404,
+                "Not Found");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+
+
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseEntity<ErrorResponseDTO> handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
