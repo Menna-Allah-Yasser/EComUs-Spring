@@ -1,5 +1,6 @@
 package org.iti.ecomus.service.impl;
 
+import org.iti.ecomus.dto.CheckOutOrderDTO;
 import org.iti.ecomus.dto.OrderDTO;
 import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.enums.OrderStatus;
@@ -25,7 +26,10 @@ public class OrderService {
     private OrderMapper orderMapper;
 
     @Autowired
-    private MailSender mailSender;
+    private OrderManagementService orderManagementService;
+
+    @Autowired
+    private CheckoutService checkoutService;
 
     @Transactional(readOnly = true)
     List<OrderDTO> getAllOrders() {
@@ -33,10 +37,10 @@ public class OrderService {
     }
 
 
-    @Transactional
-    public OrderDTO saveOrder(OrderDTO orderDTO) {
-        return orderMapper.toOrderDTO(orderRepo.save(orderMapper.toOrder(orderDTO)));
-    }
+//    @Transactional
+//    public OrderDTO saveOrder(OrderDTO orderDTO) {
+//        return orderMapper.toOrderDTO(orderRepo.save(orderMapper.toOrder(orderDTO)));
+//    }
 
     @Transactional(readOnly = true)
     public List<OrderDTO> getOrdersByUserId(Long userId) {
@@ -50,11 +54,9 @@ public class OrderService {
     }
 
     @Transactional
-    public void updateOrderStatus(Long orderId, OrderStatus status) {
-        Order order = orderRepo.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
-        order.setStatus(status);
-        orderRepo.save(order);
+    public OrderDTO updateOrderStatus(Long orderId, OrderStatus status) {
+       return orderMapper.toOrderDTO(
+        orderManagementService.updateOrderStatus(orderId, status));
 
     }
 
@@ -65,9 +67,10 @@ public class OrderService {
         orderRepo.delete(order);
     }
 
-//    @Transactional
-//    public OrderDTO createOrder(Long userId) {
-//
-//    }
+    @Transactional
+    public OrderDTO createOrder(Long userId, CheckOutOrderDTO checkoutRequest) {
+        return orderMapper.toOrderDTO(
+        checkoutService.processCheckout(userId,checkoutRequest));
+    }
 
 }
