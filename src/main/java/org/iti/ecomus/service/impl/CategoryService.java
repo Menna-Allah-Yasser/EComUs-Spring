@@ -6,7 +6,6 @@ import org.iti.ecomus.exceptions.*;
 import org.iti.ecomus.mappers.CategoryMapper;
 import org.iti.ecomus.repository.CategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +32,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryDTO getCategoryById(Long categoryId) {
         if (categoryId == null) {
-            throw new IllegalArgumentException("Category ID cannot be null");
+            throw new BadRequestException("Category ID cannot be null");
         }
         return categoryRepo.findById(categoryId)
                 .map(categoryMapper::toCategoryDTO)
@@ -43,7 +42,7 @@ public class CategoryService {
 
     public void addCategory(CategoryDTO dto) {
         if (dto == null || dto.getCategoryName() == null || dto.getCategoryName().isBlank()) {
-            throw new IllegalArgumentException("Category name cannot be empty");
+            throw new BadRequestException("Category name cannot be empty");
         }
         String trimmedName = dto.getCategoryName().trim();
         if (isCategoryNameExists(trimmedName)) {
@@ -57,7 +56,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long categoryId) {
         if (categoryId == null) {
-            throw new IllegalArgumentException("Category ID cannot be null");
+            throw new BadRequestException("Category ID cannot be null");
         }
 
         boolean exists = categoryRepo.existsById(categoryId);
@@ -72,13 +71,13 @@ public class CategoryService {
     public void updateCategory(CategoryDTO dto) {
 
         if (dto == null || dto.getCategoryId() == null) {
-            throw new IllegalArgumentException("Invalid data");
+            throw new BadRequestException("Invalid data");
         }
 
         String trimmedName = dto.getCategoryName().trim();
 
         if (trimmedName.isEmpty()) {
-            throw new IllegalArgumentException("Category name cannot be empty");
+            throw new BadRequestException("Category name cannot be empty");
         }
 
         Category existing = categoryRepo.findById(dto.getCategoryId())
