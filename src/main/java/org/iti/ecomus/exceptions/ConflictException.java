@@ -1,8 +1,9 @@
 package org.iti.ecomus.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-// Thrown for violations like trying to create a resource that already exists
-// Adding user with existing email
+@ResponseStatus(HttpStatus.CONFLICT)
 public class ConflictException extends RuntimeException{
     public ConflictException(String message) {
         super(message);

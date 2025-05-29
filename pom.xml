@@ -145,6 +145,7 @@
 			<version>2.12.1</version>
 		</dependency>
 
+
 <!--		swagger ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -156,6 +157,7 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
 		</dependency>
+
 	</dependencies>
 
 	<build>
