@@ -34,6 +34,7 @@ public class UserController {
     public ResponseEntity user(@AuthenticationPrincipal User user, @PathVariable("id")   Long id) {
 //        System.out.println("User ID: " + user.getUserId());
         UserDTO userDTO = userMapper.toUserDTO(userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("User not found")));
+
         return ResponseEntity.ok(userDTO);
     }
 
