@@ -18,8 +18,8 @@ import java.sql.Date;
 @NoArgsConstructor
 public class UserSignInDTO {
 
-    @NotBlank(message = "User name cannot be blank")
-    private String userName;
+    @NotBlank(message = "email cannot be blank")
+    private String email;
 
     @NotBlank(message = "Password cannot be blank")
     private String password;

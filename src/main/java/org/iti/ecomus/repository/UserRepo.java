@@ -18,7 +18,9 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Query("SELECT COUNT(u) FROM User u WHERE u.email = :email")
     Long checkValidEmail(@Param("email") String email);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     Optional<User> findByUserName(String userName);
+
+    boolean existsByEmail(String email);
 }

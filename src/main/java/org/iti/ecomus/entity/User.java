@@ -109,6 +109,10 @@ orphanRemoval = true,
 
     @Override
     public String getUsername() {
+        return this.email;
+    }
+
+    public String getUserName() {
         return this.userName;
     }
 
