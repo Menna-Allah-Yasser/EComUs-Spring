@@ -5,8 +5,10 @@ import org.iti.ecomus.dto.OrderDTO;
 import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.exceptions.OrderNotFoundException;
+import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.OrderMapper;
 import org.iti.ecomus.repository.OrderRepo;
+import org.iti.ecomus.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class OrderService {
 
     @Autowired
     private CheckoutService checkoutService;
+    @Autowired
+    private UserRepo userRepo;
 
     @Transactional(readOnly = true)
     List<OrderDTO> getAllOrders() {
@@ -44,7 +48,9 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public List<OrderDTO> getOrdersByUserId(Long userId) {
-
+        if (userId == null || !userRepo.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found");
+        }
         List<Order> orders = orderRepo.findByUser_UserId(userId);
 
         List<OrderDTO> orderDTOs = orderMapper.toOrderDTO(orders);
@@ -55,6 +61,7 @@ public class OrderService {
 
     @Transactional
     public OrderDTO updateOrderStatus(Long orderId, OrderStatus status) {
+
        return orderMapper.toOrderDTO(
         orderManagementService.updateOrderStatus(orderId, status));
 
