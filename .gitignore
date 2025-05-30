@@ -78,3 +78,4 @@ replay_pid*
 creds
 #####
 src/main/resources/application-credentials.properties
+/ecomus.iml

@@ -2,8 +2,7 @@ package org.iti.ecomus.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDTO {
@@ -17,5 +16,7 @@ public class AddressDTO {
     private String street;
 
     private String buildingNo;
+
+    private Long userId;
 
 }
