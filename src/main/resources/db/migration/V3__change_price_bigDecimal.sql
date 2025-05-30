@@ -8,3 +8,6 @@ ALTER TABLE `orders`
 -- Change price column in product table
 ALTER TABLE `product`
     MODIFY COLUMN `price` DECIMAL(10,2) NOT NULL;
+
+ALTER TABLE `user`
+    MODIFY COLUMN `creditLimit` DECIMAL(10,2);

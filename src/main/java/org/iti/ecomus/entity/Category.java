@@ -18,7 +18,7 @@ public class Category implements Serializable {
     private Long categoryId;
 
     @Column(name = "categoryName", nullable = false, unique = true)
-    @NotEmpty
+//    @NotEmpty
     private String categoryName;
 
     @ManyToMany

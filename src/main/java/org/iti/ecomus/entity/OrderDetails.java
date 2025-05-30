@@ -2,14 +2,18 @@ package org.iti.ecomus.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "orderdetails")
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"order", "product"})
+@Builder
+@AllArgsConstructor
 public class OrderDetails implements Serializable {
 
     @Id
@@ -26,7 +30,7 @@ public class OrderDetails implements Serializable {
     private Product product;
 
     @Column(name = "quantity", nullable = false)
-    @Min(1)
+//    @Min(1)
     private int quantity;
 
     @Column(name = "price", nullable = false)
@@ -35,12 +39,12 @@ public class OrderDetails implements Serializable {
     public OrderDetails() {
     }
 
-    public OrderDetails(Order order, Product product, int quantity, BigDecimal price) {
-        this.order = order;
-        this.product = product;
-        this.quantity = quantity;
-        this.price = price;
-    }
+//    public OrderDetails(Order order, Product product, int quantity, BigDecimal price) {
+//        this.order = order;
+//        this.product = product;
+//        this.quantity = quantity;
+//        this.price = price;
+//    }
 
 
 }

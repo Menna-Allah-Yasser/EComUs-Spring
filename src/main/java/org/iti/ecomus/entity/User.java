@@ -2,6 +2,7 @@ package org.iti.ecomus.entity;
 
 // todo --> password hash
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,16 +31,16 @@ public class User implements Serializable, UserDetails {
     private Long userId;
 
     @Column(name = "userName", nullable = false )
-    @NotEmpty
+//    @NotEmpty
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
-    @NotEmpty
+//    @Email
+//    @NotEmpty
     private String email;
 
     @Column(name = "password", nullable = false)
-    @NotEmpty
+//    @NotEmpty
     private String password;
 
     @Column(name = "birthdate")
@@ -52,7 +53,7 @@ public class User implements Serializable, UserDetails {
     private String creditNo;
 
     @Column(name = "creditLimit")
-    private Integer creditLimit;
+    private BigDecimal creditLimit;
 
     @Column(name = "phone")
     private String phone;
@@ -84,7 +85,7 @@ orphanRemoval = true,
     }
 
     public User(
-            String userName, String email, String password, Date BD, String job, String creditNo, Integer creditLimit, String phone) {
+            String userName, String email, String password, Date BD, String job, String creditNo, BigDecimal creditLimit, String phone) {
         this.userName = userName;
         this.email = email;
         this.password = password;

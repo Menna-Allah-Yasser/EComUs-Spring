@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.iti.ecomus.entity.Cart;
 import org.iti.ecomus.enums.UserRole;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class UserDTO {
 
     private String creditNo;
 
-    private Integer creditLimit;
+    private BigDecimal creditLimit;
 
     private String phone;
 

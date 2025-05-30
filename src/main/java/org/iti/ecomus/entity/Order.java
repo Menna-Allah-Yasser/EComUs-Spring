@@ -2,6 +2,8 @@ package org.iti.ecomus.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 @Data
+@Builder
+@AllArgsConstructor
 public class Order implements Serializable {
 
     @Id
@@ -40,7 +44,7 @@ public class Order implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
-    @NotEmpty
+//    @NotEmpty
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -49,13 +53,13 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(String address, BigDecimal price, Date date, OrderStatus status, PayType payType, User user) {
-        this.address = address;
-        this.price = price;
-        this.date = date;
-        this.status = status;
-        this.payType = payType;
-        this.user = user;
-    }
+//    public Order(String address, BigDecimal price, Date date, OrderStatus status, PayType payType, User user) {
+//        this.address = address;
+//        this.price = price;
+//        this.date = date;
+//        this.status = status;
+//        this.payType = payType;
+//        this.user = user;
+//    }
 
 }

@@ -85,7 +85,7 @@ public class KeyUtils {
             }
         }
 
-        File directory = new File("access-refresh-token-keys");
+        File directory = new File("src/main/resources/rsa");
         if (!directory.exists()) {
             directory.mkdirs();
         }
