@@ -44,7 +44,7 @@ public class Order implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
-    @NotEmpty
+//    @NotEmpty
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

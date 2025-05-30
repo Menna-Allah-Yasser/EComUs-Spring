@@ -20,18 +20,18 @@ public class Product implements Serializable {
     private Long productId;
 
     @Column(name = "productName", nullable = false)
-    @NotEmpty
+//    @NotEmpty
     private String productName;
 
     @Column(name = "description", nullable = false)
     private String description;
 
     @Column(name = "quantity", nullable = false)
-    @Min(0)
+//    @Min(0)
     private int quantity;
 
     @Column(name = "price", nullable = false)
-    @Min(1)
+//    @Min(1)
     private BigDecimal price;
 
     @ManyToMany(mappedBy = "products") // "products" is the name of the field in Category

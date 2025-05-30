@@ -31,16 +31,16 @@ public class User implements Serializable, UserDetails {
     private Long userId;
 
     @Column(name = "userName", nullable = false )
-    @NotEmpty
+//    @NotEmpty
     private String userName;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
-    @NotEmpty
+//    @Email
+//    @NotEmpty
     private String email;
 
     @Column(name = "password", nullable = false)
-    @NotEmpty
+//    @NotEmpty
     private String password;
 
     @Column(name = "birthdate")
