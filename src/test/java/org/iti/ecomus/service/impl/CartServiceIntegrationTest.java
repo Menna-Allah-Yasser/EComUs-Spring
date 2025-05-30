@@ -127,5 +127,20 @@ void testAddOrUpdateCartItem_Integration() {
         assertEquals(200, total); // 2 * 100
     }
 
+    @Test
+    void testRemoveOrUpdateCartItem_Integration() {
+        cartService.addOrUpdateCartItem(userId, productId, 5);
+        cartService.removeOrUpdateCartItem(userId, productId, 2);
+
+        var cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
+        assertNotNull(cart);
+        assertEquals(3, cart.getQuantity());
+
+        // Test removing all items
+        cartService.removeOrUpdateCartItem(userId, productId, 3);
+        cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
+        assertNull(cart);
+    }
+
 
 }

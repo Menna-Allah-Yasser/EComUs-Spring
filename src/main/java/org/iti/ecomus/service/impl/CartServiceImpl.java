@@ -7,6 +7,7 @@ import org.iti.ecomus.dto.CartDTO;
 import org.iti.ecomus.entity.Cart;
 import org.iti.ecomus.entity.Product;
 import org.iti.ecomus.entity.User;
+import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.CartMapper;
 import org.iti.ecomus.repository.CartRepo;
 import org.iti.ecomus.repository.ProductRepo;
@@ -33,6 +34,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartDTO> getCartItemsByUserId(Long userId) {
+        if (userId == null || !userRepo.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found");
+        }
         List<Cart> carts = cartRepo.findByUserUserId(userId);
         return carts.stream()
                 .map(cartMapper::toCartDTO)
@@ -42,13 +46,15 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDTO getCartItem(Long userId, Long productId) {
         Cart cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
-        if (cart == null) return null;
+        if (cart == null){
+            throw new ResourceNotFoundException("Cart item not found for userId: " + userId + " and productId: " + productId);
+        }
         return cartMapper.toCartDTO(cart);
     }
 @Override
 public void addOrUpdateCartItem(Long userId, Long productId, int quantity) {
-    User user = userRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-    Product product = productRepo.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+    User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
     Cart cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
     if (cart == null) {
@@ -64,6 +70,33 @@ public void addOrUpdateCartItem(Long userId, Long productId, int quantity) {
     cartRepo.save(cart);
 }
 
+    @Override
+    public void removeOrUpdateCartItem(Long userId, Long productId, int quantity) {
+//        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+//        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        if(!userRepo.existsById(userId)){
+            throw new ResourceNotFoundException("User not found");
+        }
+        if(!productRepo.existsById(productId)){
+            throw new ResourceNotFoundException("Product not found");
+        }
+
+        Cart cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
+        if (cart == null) {
+            throw new ResourceNotFoundException("Cart item not found");
+        }
+
+        int newQuantity = cart.getQuantity() - quantity;
+        if (newQuantity <= 0) {
+            // Remove the item from user's cart if quantity becomes 0 or negative
+            cartRepo.delete(cart);
+        } else {
+            // Update the quantity if it is still positive
+            cart.setQuantity(newQuantity);
+            cartRepo.save(cart);
+        }
+    }
 
     @Override
     public void removeCartItem(Long userId, Long productId) {

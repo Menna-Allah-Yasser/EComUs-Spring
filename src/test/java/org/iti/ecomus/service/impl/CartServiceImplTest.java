@@ -53,6 +53,7 @@ private ProductRepo productRepo;
 
         when(cartRepo.findByUserUserId(userId)).thenReturn(carts);
         when(cartMapper.toCartDTO(cart)).thenReturn(cartDTO);
+        when(userRepo.existsById(userId)).thenReturn(true);
 
         List<CartDTO> result = cartService.getCartItemsByUserId(userId);
 
