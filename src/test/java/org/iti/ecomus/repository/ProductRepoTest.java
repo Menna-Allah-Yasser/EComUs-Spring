@@ -2,6 +2,7 @@ package org.iti.ecomus.repository;
 
 
 import org.iti.ecomus.annotation.IntegrationTest;
+import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.entity.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ProductRepoTest {
         productRepo.save(product2);
         productRepo.save(product3);
 
-        List<Product> products = productRepo.findByQuantityGreaterThan(0);
+        List<Product> products = productRepo.findByQuantityGreaterThanEqual(0);
 
         assertEquals(22, products.size(), "Should return 2 products with quantity > 0");
         //assertTrue(products.stream().allMatch(product -> product.getQuantity() > 0), "All products should have quantity greater than zero.");
