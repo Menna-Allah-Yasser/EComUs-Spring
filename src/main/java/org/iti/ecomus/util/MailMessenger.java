@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.iti.ecomus.service.impl.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class MailMessenger {
     @Autowired
      private EmailService Mail;
 
+    @Async("emailTaskExecutor")
     public void successfullyRegister(String userName, String userEmail) {
 
         String subject = "Welcome to Ecommus - Successful Registration!";
@@ -30,6 +32,7 @@ public class MailMessenger {
         }
     }
 
+    @Async("emailTaskExecutor")
     public void successfullyOrderPlaced(String userName, String userEmail, String orderId, String OrderDate) {
         String subject = "Order Confirmation - Your Product is on its way!";
         String body = "Hi " + userName
@@ -45,6 +48,7 @@ public class MailMessenger {
         }
     }
 
+    @Async("emailTaskExecutor")
     public void orderShipped(String userName, String userEmail, String orderId, String OrderDate) {
         String subject = "Your Order is Out for Delivery!";
         String body = "Hi " + userName
@@ -60,6 +64,7 @@ public class MailMessenger {
         }
     }
 
+    @Async("emailTaskExecutor")
     public void sendOtp(String userEmail, int code) {
         String subject = "Verification code for password change";
         String body = "Hi, " + "<p>Please use the below verification code to reset your password!</p>" + "<h3>" + code
@@ -71,6 +76,7 @@ public class MailMessenger {
         }
     }
 
+    @Async("emailTaskExecutor")
     public void sendresetPassword(String userEmail, String token){
         String subject = "Reset Password";
         String resetLink = "http://localhost:8080/customer/reset-password.jsp?token=" + token;
@@ -87,6 +93,7 @@ public class MailMessenger {
         }
     }
 
+    @Async("emailTaskExecutor")
     public void orderCompleted(String username, @Email @NotEmpty String email, String string, String string1) {
         String subject = "Order Completed - Thank You for Shopping with Ecommus!";
         String body = "Hi " + username
