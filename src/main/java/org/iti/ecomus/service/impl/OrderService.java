@@ -36,10 +36,17 @@ public class OrderService {
     private UserRepo userRepo;
 
     @Transactional(readOnly = true)
-    List<OrderDTO> getAllOrders() {
+    public List<OrderDTO> getAllOrders() {
         return orderMapper.toOrderDTO(orderRepo.findAll());
     }
 
+
+    @Transactional(readOnly = true)
+    public OrderDTO getOrderById(Long orderId) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + orderId));
+        return orderMapper.toOrderDTO(order);
+    }
 
 //    @Transactional
 //    public OrderDTO saveOrder(OrderDTO orderDTO) {
@@ -66,6 +73,12 @@ public class OrderService {
         orderManagementService.updateOrderStatus(orderId, status));
 
     }
+
+    @Transactional(readOnly = true)
+    public boolean isOrderOwnedByUser(Long orderId, Long userId) {
+        return orderRepo.existsByOrderIdAndUser_UserId(orderId, userId);
+    }
+
 
     @Transactional
     public void deleteOrder(Long orderId) {

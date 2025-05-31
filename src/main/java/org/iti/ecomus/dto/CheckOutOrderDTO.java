@@ -1,5 +1,7 @@
 package org.iti.ecomus.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 public class CheckOutOrderDTO {
 
+    @NotBlank(message = "an order must have an address")
     private String address;
 
-
+    @NotNull(message = "payment method is required")
     private PayType payType;
 
 }

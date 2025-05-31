@@ -15,10 +15,13 @@ public interface CartRepo extends JpaRepository<Cart, CartPK> {
     Cart findByUserUserIdAndProductProductId(Long userId, Long productId); 
 
     @Modifying
+    @Query("DELETE FROM Cart c WHERE c.user.userId = :userId AND c.product.productId = :productId")
     void deleteByUserUserIdAndProductProductId(Long userId, Long productId);
 
     @Modifying
+    @Query("DELETE FROM Cart c WHERE c.user.userId = :userId")
     void deleteByUserUserId(Long userId);
+
 
     @Query("SELECT SUM(c.quantity) FROM Cart c WHERE c.user.userId = :userId")
     Integer getTotalQuantityByUserId(Long userId);
