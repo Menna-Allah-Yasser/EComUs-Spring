@@ -40,7 +40,7 @@ public class CategoryService {
                         new ResourceNotFoundException("Category not found with ID: " + categoryId));
     }
 
-    public void addCategory(CategoryDTO dto) {
+    public CategoryDTO addCategory(CategoryDTO dto) {
         if (dto == null || dto.getCategoryName() == null || dto.getCategoryName().isBlank()) {
             throw new BadRequestException("Category name cannot be empty");
         }
@@ -50,7 +50,8 @@ public class CategoryService {
         }
         Category category = categoryMapper.toCategory(dto);
         category.setCategoryName(trimmedName);
-        categoryRepo.save(category);
+        Category saved = categoryRepo.save(category);
+        return categoryMapper.toCategoryDTO(saved);
     }
 
     @Transactional
@@ -68,7 +69,7 @@ public class CategoryService {
     }
 
 
-    public void updateCategory(CategoryDTO dto) {
+    public CategoryDTO updateCategory(CategoryDTO dto) {
 
         if (dto == null || dto.getCategoryId() == null) {
             throw new BadRequestException("Invalid data");
@@ -91,11 +92,12 @@ public class CategoryService {
         Category updated = categoryMapper.toCategory(dto);
         updated.setCategoryId(existing.getCategoryId());
         updated.setCategoryName(trimmedName);
-        categoryRepo.save(updated);
+        Category updatedCategory = categoryRepo.save(updated);
+        return categoryMapper.toCategoryDTO(updatedCategory);
     }
 
 
-    public boolean isCategoryNameExists(String categoryName) {
+    private boolean isCategoryNameExists(String categoryName) {
         return categoryRepo.existsCategoriesByCategoryName(categoryName);
     }
 

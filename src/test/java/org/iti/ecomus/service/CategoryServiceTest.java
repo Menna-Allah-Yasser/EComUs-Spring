@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -214,24 +215,4 @@ public class CategoryServiceTest {
         }
     }
 
-    // -----------------------------
-    @Nested
-    class IsCategoryNameExistsTests {
-
-        @Test
-        void testIsCategoryNameExists_True() {
-            String existingName = generateUniqueName("Existing");
-            Category cat = new Category();
-            cat.setCategoryName(existingName);
-            categoryRepo.save(cat);
-
-            assertTrue(categoryService.isCategoryNameExists(existingName));
-        }
-
-        @Test
-        void testIsCategoryNameExists_False() {
-            String nonExistingName = generateUniqueName("NonExisting");
-            assertFalse(categoryService.isCategoryNameExists(nonExistingName));
-        }
-    }
 }
