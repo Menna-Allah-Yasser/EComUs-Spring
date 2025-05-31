@@ -10,10 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.iti.ecomus.dto.UserDTO;
 import org.iti.ecomus.entity.User;
@@ -34,10 +31,11 @@ public class UserController {
     public ResponseEntity user(@AuthenticationPrincipal User user, @PathVariable("id")   Long id) {
 //        System.out.println("User ID: " + user.getUserId());
         UserDTO userDTO = userMapper.toUserDTO(userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("User not found")));
+
         return ResponseEntity.ok(userDTO);
     }
 
-    @GetMapping("/all")
+    @PutMapping("/all")
     @RolesAllowed("ADMIN")
 //    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity allUsers(@AuthenticationPrincipal User user) {

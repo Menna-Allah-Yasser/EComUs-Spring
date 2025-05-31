@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +45,7 @@ public class OrderCreationService {
                 .payType(payment)
                 .build();
 
+        order.setOrderDetails(new ArrayList<>());
         // convert carts to order details and set them in the order
         for( Cart cart : carts) {
         OrderDetails orderDetails = OrderDetails.builder()

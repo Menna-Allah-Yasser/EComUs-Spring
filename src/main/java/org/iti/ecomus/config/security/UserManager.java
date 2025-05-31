@@ -1,6 +1,12 @@
 package org.iti.ecomus.config.security;
 
+import org.iti.ecomus.dto.UpdateProfileDTO;
+import org.iti.ecomus.dto.UserDTO;
+import org.iti.ecomus.dto.UserSignUpDTO;
 import org.iti.ecomus.entity.User;
+import org.iti.ecomus.exceptions.BadRequestException;
+import org.iti.ecomus.exceptions.ConflictException;
+import org.iti.ecomus.mappers.UserMapper;
 import org.iti.ecomus.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,10 +28,17 @@ public class UserManager implements UserDetailsManager {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @Override
     public void createUser(UserDetails userDetails) {
 
         User user = (User) userDetails;
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new ConflictException("Email already exists");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -33,16 +46,39 @@ public class UserManager implements UserDetailsManager {
     @Override
     public void updateUser(UserDetails userDetails) {
         User user = (User) userDetails;
-        Optional<User> existingUserOpt = userRepository.findByUserName(user.getUsername());
+        Optional<User> existingUserOpt = userRepository.findByEmail(user.getUsername());
         if (existingUserOpt.isEmpty()) {
             throw new UsernameNotFoundException("Cannot update non-existing user: " + user.getUsername());
         }
         userRepository.save(user);
     }
 
+    public UserDTO updateUserProfile(User user, UpdateProfileDTO updateDTO) {
+
+        // Check if email is being changed and if new email already exists
+        if (!user.getEmail().equals(updateDTO.getEmail()) &&
+                userRepository.existsByEmail(updateDTO.getEmail())) {
+            throw new ConflictException("Email already exists");
+        }
+
+        // Update user fields
+        user.setEmail(updateDTO.getEmail());
+        user.setPhone(updateDTO.getPhone());
+        user.setCreditLimit(updateDTO.getCreditLimit());
+        user.setCreditNo(updateDTO.getCreditNo());
+        user.setJob(updateDTO.getJob());
+        user.setUserName(updateDTO.getUserName());
+
+        this.updateUser(user);
+
+        UserDTO userDTO = userMapper.toUserDTO(userRepository.findById(user.getUserId()).get());
+
+        return userDTO;
+    }
+
     @Override
-    public void deleteUser(String username) {
-        Optional<User> userOpt = userRepository.findByUserName(username);
+    public void deleteUser(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
         userOpt.ifPresent(userRepository::delete);
     }
 
@@ -55,14 +91,14 @@ public class UserManager implements UserDetailsManager {
                 : null;
 
         if (currentUser == null) {
-            throw new IllegalStateException("No authenticated user found to change password.");
+            throw new BadRequestException("No authenticated user found to change password.");
         }
 
-        User user = userRepository.findByUserName(currentUser.getUsername())
+        User user = userRepository.findByEmail(currentUser.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new IllegalArgumentException("Old password does not match.");
+            throw new BadRequestException("Old password does not match.");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
@@ -70,19 +106,19 @@ public class UserManager implements UserDetailsManager {
     }
 
     @Override
-    public boolean userExists(String username) {
+    public boolean userExists(String email) {
 
-        return userRepository.findByUserName(username).isPresent();
+        return userRepository.findByEmail(email).isPresent();
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Fetch the user from the repository by username
-        Optional<User> userOptional = userRepository.findByUserName(username);
+        Optional<User> userOptional = userRepository.findByEmail(email);
 
         // Check if the user exists
         if (userOptional.isEmpty()) {
-            throw new UsernameNotFoundException(MessageFormat.format("User with username {0} not found", username));
+            throw new UsernameNotFoundException(MessageFormat.format("User with username {0} not found", email));
         }
 
         // Return the UserDetails extracted from the User entity

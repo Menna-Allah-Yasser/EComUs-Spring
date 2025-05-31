@@ -57,7 +57,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(AppConstants.PUBLIC_URLS).permitAll()
-                        .requestMatchers(AppConstants.ADMIN_URLS).hasAuthority("ADMIN")
+                        .requestMatchers(AppConstants.ADMIN_URLS).hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

@@ -1,10 +1,17 @@
 package org.iti.ecomus.service.impl;
 
+import org.iti.ecomus.config.security.UserManager;
+import org.iti.ecomus.dto.ChangePasswordDTO;
+import org.iti.ecomus.dto.UpdateProfileDTO;
+import org.iti.ecomus.dto.UserDTO;
+import org.iti.ecomus.dto.UserSignUpDTO;
 import org.iti.ecomus.entity.User;
+import org.iti.ecomus.exceptions.ConflictException;
+import org.iti.ecomus.mappers.UserMapper;
 import org.iti.ecomus.repository.UserRepo;
 import org.iti.ecomus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,57 +22,31 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepo userRepository;
+    private UserRepo userRepo;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserManager userManager;
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userMapper.toUserDTOs( userRepo.findAll());
     }
 
     @Override
-    public User getUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+    public UserDTO getUserById(Long userId) {
+        return userMapper.toUserDTO( userRepo.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId)));
     }
 
-    @Override
-    public User createUser(User user) {
-        if (checkValidEmail(user.getEmail()) > 0) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public void updatePassword(ChangePasswordDTO changePasswordDTO){
+        userManager.changePassword(changePasswordDTO.getOldPassword(), changePasswordDTO.getNewPassword());
     }
 
-    @Override
-    public User updateUser(User user) {
-        if (!userRepository.existsById(user.getUserId())) {
-            throw new IllegalArgumentException("User not found with ID: " + user.getUserId());
-        }
-        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        return userRepository.save(user);
+    public UserDTO updateUser(User user,UpdateProfileDTO profileDTO){
+        return userManager.updateUserProfile(user, profileDTO);
     }
 
-    @Override
-    public void deleteUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new IllegalArgumentException("User not found with ID: " + userId);
-        }
-        userRepository.deleteById(userId);
-    }
-
-    @Override
-    public Long checkValidEmail(String email) {
-        return userRepository.checkValidEmail(email);
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
 }
