@@ -1,13 +1,12 @@
 package org.iti.ecomus.service.impl;
 
 import org.iti.ecomus.config.security.UserManager;
-import org.iti.ecomus.dto.ChangePasswordDTO;
-import org.iti.ecomus.dto.UpdateProfileDTO;
-import org.iti.ecomus.dto.UserDTO;
-import org.iti.ecomus.dto.UserSignUpDTO;
+import org.iti.ecomus.dto.*;
+import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.exceptions.ConflictException;
 import org.iti.ecomus.mappers.UserMapper;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.repository.UserRepo;
 import org.iti.ecomus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
         return userMapper.toUserDTOs( userRepo.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    public PagedResponse<UserDTO> getAllUsers(PagingAndSortingHelper helper, int pageNum, int pageSize) {
+        PagedResponse<User> pagedResponse = helper.getPagedResponse(pageNum, pageSize, userRepo,null);
+        PagedResponse<UserDTO> resp = pagedResponse.mapContent(userMapper::toUserDTOs);
+        return resp;
     }
 
     @Override

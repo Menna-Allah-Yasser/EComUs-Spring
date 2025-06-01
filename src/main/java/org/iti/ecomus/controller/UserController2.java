@@ -1,12 +1,13 @@
 package org.iti.ecomus.controller;
 
 import jakarta.annotation.security.RolesAllowed;
-import org.iti.ecomus.enums.UserRole;
+import org.iti.ecomus.config.AppConstants;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.mappers.UserMapper;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
+import org.iti.ecomus.paging.PagingAndSortingParam;
 import org.iti.ecomus.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,6 +34,18 @@ public class UserController2 {
         UserDTO userDTO = userMapper.toUserDTO(userRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("User not found")));
 
         return ResponseEntity.ok(userDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<PagedResponse<UserDTO>> users(@AuthenticationPrincipal User user, @PagingAndSortingParam(
+                                           model = AppConstants.USER_MODEL,
+                                           defaultSortField = "userId"
+                                   ) PagingAndSortingHelper helper,
+                                     @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
+                                     @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        PagedResponse<User> pagedResponse = helper.getPagedResponse(pageNum, pageSize, userRepository,null);
+        PagedResponse<UserDTO> resp = pagedResponse.mapContent(userMapper::toUserDTOs);
+        return ResponseEntity.ok( resp);
     }
 
     @PutMapping("/all")

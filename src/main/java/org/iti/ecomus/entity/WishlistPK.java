@@ -1,13 +1,16 @@
 package org.iti.ecomus.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class WishlistPK implements Serializable {
 
     private Long userId;

@@ -1,9 +1,13 @@
 package org.iti.ecomus.controller.customer;
 
 import jakarta.validation.Valid;
+import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.CheckOutOrderDTO;
 import org.iti.ecomus.dto.OrderDTO;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.entity.User;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
+import org.iti.ecomus.paging.PagingAndSortingParam;
 import org.iti.ecomus.service.impl.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +31,21 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllOrders(@AuthenticationPrincipal User user) {
-        List<OrderDTO> orders = orderService.getOrdersByUserId(user.getUserId());
-        return ResponseEntity.ok(orders);
+    public ResponseEntity<PagedResponse<OrderDTO>> getOrders(@AuthenticationPrincipal User user, @PagingAndSortingParam(
+                                                                     model = AppConstants.ORDER_MODEL,
+                                                                     isUser = true,
+                                                                     defaultSortField = "orderId"
+                                                             ) PagingAndSortingHelper helper,
+                                                             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
+                                                             @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        return ResponseEntity.ok(orderService.getAllOrders(helper, pageNum, pageSize, user.getUserId()));
     }
+
+//    @GetMapping
+//    public ResponseEntity<List<OrderDTO>> getAllOrders(@AuthenticationPrincipal User user) {
+//        List<OrderDTO> orders = orderService.getOrdersByUserId(user.getUserId());
+//        return ResponseEntity.ok(orders);
+//    }
 
     @PostMapping
     public ResponseEntity<OrderDTO> createOrder(@AuthenticationPrincipal User user, @RequestBody @Valid CheckOutOrderDTO orderDTO) {

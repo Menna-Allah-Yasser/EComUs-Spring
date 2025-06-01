@@ -1,7 +1,10 @@
 package org.iti.ecomus.service;
 
+import org.iti.ecomus.dto.NewProductDTO;
+import org.iti.ecomus.dto.PagedResponse;
+import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.entity.Product;
-import org.springframework.stereotype.Repository;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +13,20 @@ import java.util.Optional;
 public interface ProductService {
 
 
-    Optional<Long> addProduct(Product product);
 
-    Optional<Product> getProductById(Long productId);
+    ProductDTO getProductById(Long productId);
 
-    Optional<List<Product>> getAllProducts() ;
+
+    PagedResponse<ProductDTO> getAllProducts(PagingAndSortingHelper helper, int pageNum, int pageSize);
 
     void deleteProductById(Long productId);
 
-    Optional<List<Product>> getProductsByQuantityGreaterThan(int quantity);
+    Optional<List<ProductDTO>> getProductsByQuantityGreaterThan(int quantity);
 
-    Product updateProduct(Product product);
+
+    ProductDTO updateProduct(Long id, NewProductDTO product);
+
+    List<ProductDTO> findByProductName(String name);
+
+    Long addProductWithCategories(NewProductDTO newProductDTO);
 }

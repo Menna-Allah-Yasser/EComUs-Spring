@@ -1,20 +1,14 @@
 package org.iti.ecomus.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProductDTO {
-
-    private Long productId;
+@Data
+public class NewProductDTO {
 
     @NotBlank(message = "productName cannot be blank")
     private String productName;
@@ -28,5 +22,5 @@ public class ProductDTO {
     @Min(1)
     private BigDecimal price;
 
-    private List<CategoryNoProductDTO> categories;
+    private List<CategoryNameDTO> categories;
 }
