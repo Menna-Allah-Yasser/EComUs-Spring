@@ -37,7 +37,7 @@ public class PagingAndSortingHelper {
         Page<T> page = null;
 
         try {
-            // Use enhanced search with multiple parameters
+
             if ((keyword != null && !keyword.trim().isEmpty()) ||
                     (searchParams != null && !searchParams.isEmpty())) {
 //                System.out.println(keyword + " " + searchParams);
