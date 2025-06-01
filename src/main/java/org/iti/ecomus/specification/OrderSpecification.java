@@ -79,32 +79,36 @@ public class OrderSpecification {
                             }
                             break;
                         case "priceMin":
-                            if (value instanceof BigDecimal v) {
+                            try {
+                                BigDecimal v = BigDecimal.valueOf(Long.parseLong((String) value));
                                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), v));
-                            } else {
-                                log.error("Invalid value for priceMin: " + value);
-                            }
+                            }catch (Exception e) {
+                            log.error("Invalid value for priceMin: " + value);
+                        }
                             break;
                         case "priceMax":
-                            if (value instanceof BigDecimal v) {
+                            try {
+                                BigDecimal v = BigDecimal.valueOf(Long.parseLong((String) value));
                                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), v));
-                            } else {
+                            }catch (Exception e) {
                                 log.error("Invalid value for priceMax: " + value);
                             }
                             break;
                         case "orderIdMax":
-                            if (value instanceof Integer v) {
+                            try {
+                                Integer v = Integer.valueOf(value.toString());
                                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("orderId"), v));
-                            } else {
-                                log.error("Invalid value for orderIdMin: " + value);
+                            }catch (Exception e) {
+                                log.error("Invalid value for orderIdMax: " + value);
                             }
                             break;
                         case "orderIdMin":
-                            if (value instanceof Integer v) {
+                            try {
+                                Integer v = Integer.valueOf(value.toString());
                                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("orderId"), v));
-                            } else {
-                                log.error("Invalid value for orderIdMax: " + value);
-                            }
+                            }catch (Exception e) {
+                            log.error("Invalid value for orderIdMin: " + value);
+                        }
                             break;
                         case "address":
                             try {

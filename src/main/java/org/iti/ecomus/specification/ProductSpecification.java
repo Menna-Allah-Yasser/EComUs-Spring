@@ -71,18 +71,22 @@ public class ProductSpecification {
                             }
                             break;
                         case "priceMin":
-                            if (value instanceof BigDecimal v) {
+ try {
+
+                                BigDecimal v = BigDecimal.valueOf(Long.parseLong((String) value));
                                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), v));
-                            } else {
+ }catch (Exception e) {
                                 log.error("Invalid value for priceMin: " + value);
                             }
+
                             break;
                         case "priceMax":
-                            if (value instanceof BigDecimal v) {
+                            try {
+                                BigDecimal v = BigDecimal.valueOf(Long.parseLong((String) value));
                                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), v));
-                            } else {
-                                log.error("Invalid value for priceMax: " + value);
-                            }
+                            }catch (Exception e) {
+                            log.error("Invalid value for priceMin: " + value);
+                        }
                             break;
                         case "categoryId":
                             try {
@@ -94,14 +98,16 @@ public class ProductSpecification {
                             }
                             break;
                         case "quantityMin":
-                            if (value instanceof Integer v) {
+                            try {
+                                Integer v = Integer.valueOf(value.toString());
                                 predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("quantity"), v));
-                            } else {
+                            }catch (Exception e) {
                                 log.error("Invalid value for quantityMin: " + value);
                             }
                             break;
                         case "quantityMax":
-                            if (value instanceof Integer v) {
+                            if (value instanceof Integer) {
+                                Integer v = Integer.valueOf(value.toString());
                                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("quantity"), v));
                             } else {
                                 log.error("Invalid value for quantityMax: " + value);
