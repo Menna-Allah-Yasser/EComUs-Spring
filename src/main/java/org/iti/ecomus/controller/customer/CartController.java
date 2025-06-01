@@ -3,6 +3,7 @@ package org.iti.ecomus.controller.customer;
 import java.util.List;
 
 import org.iti.ecomus.dto.CartDTO;
+import org.iti.ecomus.dto.ShoppingCartDTO;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.service.CartService;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api/public/cart")
 @RequiredArgsConstructor
 @Validated
 public class CartController {
@@ -43,9 +44,9 @@ public class CartController {
 
     @PostMapping
     public ResponseEntity<Void> addOrUpdateCartItem(@AuthenticationPrincipal User user,
-                                                    @Valid @RequestBody CartDTO cartDTO) {
+                                                    @Valid @RequestBody ShoppingCartDTO cartDTO) {
         cartService.addOrUpdateCartItem(user.getUserId(),
-                cartDTO.getProduct().getProductId(),
+                cartDTO.getProductId(),
                 cartDTO.getQuantity());
         return ResponseEntity.ok().build();
     }
@@ -63,7 +64,7 @@ public class CartController {
     public ResponseEntity<Void> removeCartItem(@AuthenticationPrincipal User user,
                                                @PathVariable Long productId) {
         cartService.removeCartItem(user.getUserId(), productId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/total-quantity")
