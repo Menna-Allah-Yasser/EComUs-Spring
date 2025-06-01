@@ -28,22 +28,4 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
-    @PostMapping
-    @RolesAllowed("ADMIN")
-    public ResponseEntity<CategoryDTO> createCategory(@Validated(OnAdd.class) @RequestBody CategoryDTO categoryDTO) {
-        return ResponseEntity.ok(categoryService.addCategory(categoryDTO));
-    }
-
-    @PutMapping()
-    @RolesAllowed("ADMIN")
-    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody @Validated(OnUpdate.class) CategoryDTO categoryDTO) {
-        return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
-    }
-
-    @DeleteMapping("/{id}")
-    @RolesAllowed("ADMIN")
-    public void deleteCategory(@PathVariable("id") Long id) {
-        categoryService.deleteCategory(id);
-    }
-
 }

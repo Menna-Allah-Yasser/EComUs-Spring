@@ -1,17 +1,15 @@
-package org.iti.ecomus.service;
+package org.iti.ecomus.service.impl;
 
 import org.iti.ecomus.dto.CategoryDTO;
 import org.iti.ecomus.entity.Category;
 import org.iti.ecomus.exceptions.*;
 import org.iti.ecomus.mappers.CategoryMapper;
 import org.iti.ecomus.repository.CategoryRepo;
-import org.iti.ecomus.service.impl.CategoryService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.*;
 import java.util.List;
 import java.util.UUID;
 
