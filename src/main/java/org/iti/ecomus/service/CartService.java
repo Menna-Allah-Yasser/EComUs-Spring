@@ -18,5 +18,6 @@ public interface CartService {
     Integer getTotalQuantity(Long userId);
 
     Integer getTotalPrice(Long userId);
+    Integer getProductTotalPrice(Long userId, Long productId);
 
 }
