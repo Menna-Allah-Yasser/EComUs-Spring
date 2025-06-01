@@ -63,9 +63,9 @@ public class CartController {
 
     @PatchMapping
     public ResponseEntity<Void> removeOrUpdateCartItem(@AuthenticationPrincipal User user,
-                                                       @Valid @RequestBody CartDTO cartDTO) {
+                                                       @Valid @RequestBody ShoppingCartDTO cartDTO) {
         cartService.removeOrUpdateCartItem(user.getUserId(),
-                cartDTO.getProduct().getProductId(),
+                cartDTO.getProductId(),
                 cartDTO.getQuantity());
         return ResponseEntity.ok().build();
     }
