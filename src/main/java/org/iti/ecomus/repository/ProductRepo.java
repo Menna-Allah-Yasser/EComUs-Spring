@@ -13,7 +13,14 @@ import java.util.Map;
 
 public interface ProductRepo extends JpaRepository<Product, Long>, SearchRepository<Product,Long> {
 
+    List<Product> findByQuantityGreaterThanEqual(int quantity);
+
+
+    List<Product> findByProductName(String name);
+
     List<Product> findByQuantityGreaterThan(int quantity);
+
+    Boolean existsByProductId(Long productId);
 
     @Override
     default public Specification<Product> getKeywordSpecification(String keyword) {

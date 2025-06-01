@@ -9,7 +9,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "productcategory")
-@Data
+@Getter
+@Setter
 public class ProductCategory implements Serializable {
 
     @EmbeddedId
