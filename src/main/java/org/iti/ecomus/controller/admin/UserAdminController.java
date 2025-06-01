@@ -30,7 +30,7 @@ public class UserAdminController {
                                                          ) PagingAndSortingHelper helper,
                                                               @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
                                                               @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
-        return ResponseEntity.ok(userService.getAllOrders(helper, pageNum, pageSize));
+        return ResponseEntity.ok(userService.getAllUsers(helper, pageNum, pageSize));
     }
 
     @GetMapping("/{id}")

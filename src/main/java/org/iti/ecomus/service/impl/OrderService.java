@@ -45,8 +45,8 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponse<OrderDTO> getAllOrders(PagingAndSortingHelper helper, int pageNum, int pageSize) {
-        PagedResponse<Order> pagedResponse = helper.getPagedResponse(pageNum, pageSize, orderRepo);
+    public PagedResponse<OrderDTO> getAllOrders(PagingAndSortingHelper helper, int pageNum, int pageSize,Long userId) {
+        PagedResponse<Order> pagedResponse = helper.getPagedResponse(pageNum, pageSize, orderRepo,userId);
         PagedResponse<OrderDTO> resp = pagedResponse.mapContent(orderMapper::toOrderDTO);
         return resp;
     }

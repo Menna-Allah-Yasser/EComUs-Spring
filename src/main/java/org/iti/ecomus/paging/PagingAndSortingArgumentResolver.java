@@ -84,6 +84,6 @@ public class PagingAndSortingArgumentResolver implements HandlerMethodArgumentRe
         }
 //        System.out.println(searchParams);
         return new PagingAndSortingHelper(
-                sortField, sortDir, keyword, searchParams, allowedSortFields, annotation.defaultSortField());
+                sortField, sortDir, keyword, searchParams, allowedSortFields, annotation.defaultSortField(),annotation.isUser());
     }
 }

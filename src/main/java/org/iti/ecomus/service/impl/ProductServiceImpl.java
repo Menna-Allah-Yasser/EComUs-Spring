@@ -45,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public PagedResponse<ProductDTO> getAllProducts(PagingAndSortingHelper helper, int pageNum, int pageSize) {
-        PagedResponse<Product> pagedResponse = helper.getPagedResponse(pageNum, pageSize, productRepo);
+        PagedResponse<Product> pagedResponse = helper.getPagedResponse(pageNum, pageSize, productRepo,null);
         PagedResponse<ProductDTO> resp = pagedResponse.mapContent(productMapper::toProductDTO);
         return resp;
     }

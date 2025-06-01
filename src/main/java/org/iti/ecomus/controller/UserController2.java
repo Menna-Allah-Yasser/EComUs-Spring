@@ -43,7 +43,7 @@ public class UserController2 {
                                    ) PagingAndSortingHelper helper,
                                      @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
                                      @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
-        PagedResponse<User> pagedResponse = helper.getPagedResponse(pageNum, pageSize, userRepository);
+        PagedResponse<User> pagedResponse = helper.getPagedResponse(pageNum, pageSize, userRepository,null);
         PagedResponse<UserDTO> resp = pagedResponse.mapContent(userMapper::toUserDTOs);
         return ResponseEntity.ok( resp);
     }

@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponse<UserDTO> getAllOrders(PagingAndSortingHelper helper, int pageNum, int pageSize) {
-        PagedResponse<User> pagedResponse = helper.getPagedResponse(pageNum, pageSize, userRepo);
+    public PagedResponse<UserDTO> getAllUsers(PagingAndSortingHelper helper, int pageNum, int pageSize) {
+        PagedResponse<User> pagedResponse = helper.getPagedResponse(pageNum, pageSize, userRepo,null);
         PagedResponse<UserDTO> resp = pagedResponse.mapContent(userMapper::toUserDTOs);
         return resp;
     }

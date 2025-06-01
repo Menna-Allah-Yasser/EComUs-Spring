@@ -21,20 +21,31 @@ public class PagingAndSortingHelper {
     private Map<String, Object> searchParams;
     private Set<String> allowedSortFields;
     private String defaultSortField;
+    private boolean isUser;
 
     public PagingAndSortingHelper(String sortField, String sortDir, String keyword,
-                                  Map<String, Object> searchParams, Set<String> allowedSortFields, String defaultSortField) {
+                                  Map<String, Object> searchParams, Set<String> allowedSortFields, String defaultSortField,boolean isUser) {
         this.sortField = validateSortField(sortField, allowedSortFields, defaultSortField);
         this.sortDir = validateSortDir(sortDir);
         this.keyword = keyword;
         this.searchParams = searchParams;
         this.allowedSortFields = allowedSortFields;
         this.defaultSortField = defaultSortField;
+        this.isUser = isUser;
     }
 
-    public <T> PagedResponse<T> getPagedResponse(int pageNum, int pageSize, SearchRepository<T, ?> repo) {
+    public <T> PagedResponse<T> getPagedResponse(int pageNum, int pageSize, SearchRepository<T, ?> repo,Long userId) {
         Pageable pageable = createPageable(pageSize, pageNum);
         Page<T> page = null;
+
+
+        if(isUser) {
+
+            if (searchParams == null) {
+                searchParams = new HashMap<>();
+            }
+            searchParams.put("userId", userId);
+        }
 
         try {
 

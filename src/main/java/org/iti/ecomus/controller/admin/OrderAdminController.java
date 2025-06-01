@@ -33,7 +33,7 @@ public class OrderAdminController {
                                                              ) PagingAndSortingHelper helper,
                                                              @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
                                                              @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
-        return ResponseEntity.ok(orderService.getAllOrders(helper, pageNum, pageSize));
+        return ResponseEntity.ok(orderService.getAllOrders(helper, pageNum, pageSize, user.getUserId()));
     }
 
     @PutMapping("/{id}/update-status")
