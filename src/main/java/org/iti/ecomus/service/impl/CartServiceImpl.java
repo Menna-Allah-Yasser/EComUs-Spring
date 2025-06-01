@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.iti.ecomus.dto.CartDTO;
+import org.iti.ecomus.dto.OrderDTO;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.entity.Cart;
+import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.entity.Product;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.CartMapper;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.repository.CartRepo;
 import org.iti.ecomus.repository.ProductRepo;
 import org.iti.ecomus.repository.UserRepo;
@@ -41,6 +45,14 @@ public class CartServiceImpl implements CartService {
         return carts.stream()
                 .map(cartMapper::toCartDTO)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public PagedResponse<CartDTO> getall(PagingAndSortingHelper helper, int pageNum, int pageSize, Long userId) {
+        PagedResponse<Cart> pagedResponse = helper.getPagedResponse(pageNum, pageSize, cartRepo, userId);
+        PagedResponse<CartDTO> resp = pagedResponse.mapContent(cartMapper::toCartDTO);
+        return resp;
+
+
     }
 
     @Override

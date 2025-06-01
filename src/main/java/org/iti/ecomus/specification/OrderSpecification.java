@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.iti.ecomus.entity.Category;
 import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.entity.Product;
+import org.iti.ecomus.entity.User;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
 import org.springframework.data.jpa.domain.Specification;
@@ -122,12 +123,13 @@ public class OrderSpecification {
                         case "userId":
                             try {
                                 Long userId = Long.valueOf(value.toString());
-                                Join<Order, Order> userJoin = root.join("user");
+                                Join<Order, User> userJoin = root.join("user");
                                 predicates.add(criteriaBuilder.equal(userJoin.get("userId"), userId));
 
                             } catch (NumberFormatException e) {
                                 log.error(e.getMessage());
                             }
+                            break;
                         default:
                             // Unknown parameter, skip or log
                             log.info("Unknown search parameter: " + key);

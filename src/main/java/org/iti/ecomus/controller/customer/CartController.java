@@ -2,21 +2,19 @@ package org.iti.ecomus.controller.customer;
 
 import java.util.List;
 
+import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.CartDTO;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ShoppingCartDTO;
+import org.iti.ecomus.dto.UserDTO;
 import org.iti.ecomus.entity.User;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
+import org.iti.ecomus.paging.PagingAndSortingParam;
 import org.iti.ecomus.service.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +27,23 @@ public class CartController {
 
     private final CartService cartService;
 
+//    @GetMapping
+//    public ResponseEntity<List<CartDTO>> getCartItems(@AuthenticationPrincipal User user) {
+//        List<CartDTO> items = cartService.getCartItemsByUserId(user.getUserId());
+//        return ResponseEntity.ok(items);
+//    }
+
     @GetMapping
-    public ResponseEntity<List<CartDTO>> getCartItems(@AuthenticationPrincipal User user) {
-        List<CartDTO> items = cartService.getCartItemsByUserId(user.getUserId());
-        return ResponseEntity.ok(items);
+    public ResponseEntity<PagedResponse<CartDTO>> getCartItems(@AuthenticationPrincipal User user,@PagingAndSortingParam(
+                                                                      model = AppConstants.CART_MODEL,
+                                                                      isUser = true,
+                                                                      defaultSortField = "userId"
+                                                              ) PagingAndSortingHelper helper,
+                                                              @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
+                                                              @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        return ResponseEntity.ok(cartService.getall(helper, pageNum, pageSize, user.getUserId()));
     }
+
 
     @GetMapping("/{productId}")
     public ResponseEntity<CartDTO> getCartItem(@AuthenticationPrincipal User user,
