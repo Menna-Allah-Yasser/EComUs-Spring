@@ -112,4 +112,13 @@ public void addOrUpdateCartItem(Long userId, Long productId, int quantity) {
     public Integer getTotalPrice(Long userId) {
         return cartRepo.calculateCartTotal(userId);
     }
+
+    @Override
+    public Integer getProductTotalPrice(Long userId, Long productId) {
+    Integer total = cartRepo.calculateProductTotalInCart(userId, productId);
+    if (total == null) {
+        throw new ResourceNotFoundException("Cart item not found for userId: " + userId + " and productId: " + productId);
+    }
+    return total;
+}
 }

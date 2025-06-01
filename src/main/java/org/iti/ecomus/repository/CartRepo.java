@@ -7,6 +7,7 @@ import org.iti.ecomus.entity.CartPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface CartRepo extends JpaRepository<Cart, CartPK> {
 
@@ -28,4 +29,8 @@ public interface CartRepo extends JpaRepository<Cart, CartPK> {
 
     @Query("SELECT SUM(c.quantity * c.product.price) FROM Cart c WHERE c.user.userId = :userId")
     Integer calculateCartTotal(Long userId);
+
+    @Query("SELECT (c.quantity * c.product.price) FROM Cart c WHERE c.user.userId = :userId AND c.product.productId = :productId")
+Integer calculateProductTotalInCart(@Param("userId") Long userId, @Param("productId") Long productId);
+
 }
