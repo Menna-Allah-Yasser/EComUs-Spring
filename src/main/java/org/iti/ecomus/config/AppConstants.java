@@ -29,6 +29,6 @@ public class AppConstants {
     public static final String[] ALLLOWED_ORDER_SEARCH_FIELDS = {"orderIdMin","orderIdMax", "address", "status", "priceMin","priceMax", "payType","userId"};
     public static final String[] ALLLOWED_PRODUCT_SEARCH_FIELDS = {"productId", "productName", "description", "price","quantityMin","quantityMax","priceMin","priceMax","categoryId", "categoryName"};
     public static final String[] ALLLOWED_ADDRESS_SEARCH_FIELDS = {"addressId", "userId", "street", "city", "area", "buildingNo"};
-    public static final String[] ALLLOWED_CART_SEARCH_FIELDS = {"cartId", "userId", "productId", "quantity"};
+    public static final String[] ALLLOWED_CART_SEARCH_FIELDS = { "userId","productId", "productName", "description", "price","quantityMin","quantityMax","priceMin","priceMax","categoryId", "categoryName"};
 
 }
