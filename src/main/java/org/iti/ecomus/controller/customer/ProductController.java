@@ -1,14 +1,15 @@
 package org.iti.ecomus.controller.customer;
 
+import org.iti.ecomus.config.AppConstants;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.entity.Product;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
+import org.iti.ecomus.paging.PagingAndSortingParam;
 import org.iti.ecomus.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,13 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<PagedResponse<ProductDTO>> getProducts(@PagingAndSortingParam(
+                                                                         model = AppConstants.PRODUCT_MODEL,
+                                                                         defaultSortField = "productId"
+                                                                 ) PagingAndSortingHelper helper,
+                                                                 @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNum,
+                                                                 @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize) {
+        return ResponseEntity.ok(productService.getAllProducts(helper, pageNum, pageSize));
     }
 
     @GetMapping("/name/{name}")

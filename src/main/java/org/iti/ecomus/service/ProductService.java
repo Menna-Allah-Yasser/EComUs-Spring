@@ -1,8 +1,10 @@
 package org.iti.ecomus.service;
 
 import org.iti.ecomus.dto.NewProductDTO;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.entity.Product;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,13 +16,15 @@ public interface ProductService {
 
     ProductDTO getProductById(Long productId);
 
-    List<ProductDTO> getAllProducts() ;
+
+    PagedResponse<ProductDTO> getAllProducts(PagingAndSortingHelper helper, int pageNum, int pageSize);
 
     void deleteProductById(Long productId);
 
     Optional<List<ProductDTO>> getProductsByQuantityGreaterThan(int quantity);
 
-    ProductDTO updateProduct(Long id, Product product);
+
+    ProductDTO updateProduct(Long id, NewProductDTO product);
 
     List<ProductDTO> findByProductName(String name);
 

@@ -1,15 +1,14 @@
 package org.iti.ecomus.service.impl;
 
 import org.iti.ecomus.dto.NewProductDTO;
+import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.entity.Category;
-import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.entity.Product;
-import org.iti.ecomus.exceptions.OrderNotFoundException;
 import org.iti.ecomus.exceptions.ProductNotFoundException;
 import org.iti.ecomus.mappers.NewProductMapper;
-import org.iti.ecomus.mappers.OrderMapper;
 import org.iti.ecomus.mappers.ProductMapper;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.repository.CategoryRepo;
 import org.iti.ecomus.repository.ProductRepo;
 import org.iti.ecomus.service.ProductService;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +32,8 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryRepo categoryRepo;
 
+    @Autowired
+    private NewProductMapper newProductMapper;
     
 
     @Override
@@ -41,8 +43,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductDTO(product);
     }
 
-    public List<ProductDTO> getAllProducts() {
-        return productMapper.toProductDTO(productRepo.findAll());
+    @Override
+    public PagedResponse<ProductDTO> getAllProducts(PagingAndSortingHelper helper, int pageNum, int pageSize) {
+        PagedResponse<Product> pagedResponse = helper.getPagedResponse(pageNum, pageSize, productRepo);
+        PagedResponse<ProductDTO> resp = pagedResponse.mapContent(productMapper::toProductDTO);
+        return resp;
     }
 
     public void deleteProductById(Long productId){
@@ -55,8 +60,24 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductDTO updateProduct(Long id, Product product){
-        return productMapper.toProductDTO(productRepo.save(product));
+    public ProductDTO updateProduct(Long id, NewProductDTO product){
+        if(!productRepo.existsByProductId(id)) {
+            throw new ProductNotFoundException("Product not found with id: " + id);
+        }
+        Product product1 = newProductMapper.toProduct(product);
+        product1.setCategories(new ArrayList<>());
+        product.getCategories().forEach(category -> {
+            Category existingCategory = categoryRepo.getCategoryByCategoryName(category.getCategoryName());
+            if (existingCategory == null) {
+                existingCategory = new Category();
+                existingCategory.setCategoryName(category.getCategoryName());
+                existingCategory = categoryRepo.save(existingCategory);
+            }
+            product1.getCategories().add(existingCategory);
+        });
+        product1.setProductId(id);
+
+        return productMapper.toProductDTO(productRepo.save(product1));
     }
 
     @Override
