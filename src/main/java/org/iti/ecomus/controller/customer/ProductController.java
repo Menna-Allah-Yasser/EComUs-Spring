@@ -33,6 +33,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts(helper, pageNum, pageSize));
     }
 
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<String>> getProductImages(@PathVariable("id") Long id) {
+        List<String> images = productService.getProductImages(id);
+        return ResponseEntity.ok(images);
+    }
+
     @GetMapping("/name/{name}")
     public ResponseEntity<List<ProductDTO>> getProductByName(@PathVariable("name") String name) {
         return ResponseEntity.ok(productService.findByProductName(name));
