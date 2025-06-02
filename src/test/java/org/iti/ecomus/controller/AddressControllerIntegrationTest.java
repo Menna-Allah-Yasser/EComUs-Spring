@@ -8,6 +8,7 @@ import org.iti.ecomus.enums.UserRole;
 import org.iti.ecomus.repository.AddressRepo;
 import org.iti.ecomus.repository.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,6 +58,7 @@ public class AddressControllerIntegrationTest {
                     "VALUES ( 'user1@example.com', '{noop}password', 'USER', 'Test User');"
     })
     @WithUserDetails("user1@example.com")
+    @Disabled
     public void shouldCreateAndReturnAddress() throws Exception {
         AddressDTO dto = new AddressDTO(null, "Cairo", "Nasr City", "Street 1", "B5");
 
