@@ -1,11 +1,10 @@
-package org.iti.ecomus.service;
+package org.iti.ecomus.service.impl;
 
 import org.iti.ecomus.dto.AddressDTO;
 import org.iti.ecomus.entity.*;
 import org.iti.ecomus.exceptions.BadRequestException;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.repository.*;
-import org.iti.ecomus.service.impl.AddressService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
