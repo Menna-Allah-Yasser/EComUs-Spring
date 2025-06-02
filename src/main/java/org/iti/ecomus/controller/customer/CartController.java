@@ -2,6 +2,8 @@ package org.iti.ecomus.controller.customer;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.CartDTO;
 import org.iti.ecomus.dto.PagedResponse;
@@ -23,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/public/cart")
 @RequiredArgsConstructor
 @Validated
+@SecurityRequirement(name = "E-Commerce Application")
+@Tag(name = "Customer - Cart", description = "Customer shopping cart management")
 public class CartController {
 
     private final CartService cartService;

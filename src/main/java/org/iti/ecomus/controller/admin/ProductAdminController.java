@@ -1,5 +1,7 @@
 package org.iti.ecomus.controller.admin;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import org.iti.ecomus.config.AppConstants;
@@ -21,6 +23,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin/products")
+@SecurityRequirement(name = "E-Commerce Application")
+@Tag(name = "Admin - Products", description = "Admin product management")
 public class ProductAdminController {
 
     @Autowired

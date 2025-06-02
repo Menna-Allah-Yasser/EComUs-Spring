@@ -1,5 +1,7 @@
 package org.iti.ecomus.controller.admin;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.UserDTO;
@@ -18,6 +20,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/users")
+@SecurityRequirement(name = "E-Commerce Application")
+@Tag(name = "Admin - Users", description = "Admin user management")
 public class UserAdminController {
 
     @Autowired

@@ -1,6 +1,8 @@
 package org.iti.ecomus.controller.customer;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.iti.ecomus.dto.AddressDTO;
 import org.iti.ecomus.entity.User;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/public/address")
+@SecurityRequirement(name = "E-Commerce Application")
+@Tag(name = "Customer - Addresses", description = "Customer address management")
 public class AddressController {
 
     @Autowired

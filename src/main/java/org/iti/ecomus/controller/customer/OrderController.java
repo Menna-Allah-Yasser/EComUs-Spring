@@ -1,5 +1,7 @@
 package org.iti.ecomus.controller.customer;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.CheckOutOrderDTO;
@@ -19,6 +21,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/public/orders")
+@SecurityRequirement(name = "E-Commerce Application")
+@Tag(name = "Customer - Orders", description = "Customer order management")
 public class OrderController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package org.iti.ecomus.controller.customer;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ProductDTO;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/public/products")
+@Tag(name = "Customer - Products", description = "Customer product browsing")
 public class ProductController {
 
     @Autowired
