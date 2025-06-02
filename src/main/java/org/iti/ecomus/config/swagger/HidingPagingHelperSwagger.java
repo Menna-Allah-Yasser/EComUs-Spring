@@ -1,4 +1,4 @@
-package org.iti.ecomus.config;
+package org.iti.ecomus.config.swagger;
 
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.parameters.Parameter;
