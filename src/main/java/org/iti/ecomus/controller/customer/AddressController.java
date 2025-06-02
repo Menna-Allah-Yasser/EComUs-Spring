@@ -5,9 +5,11 @@ import jakarta.validation.Valid;
 import org.iti.ecomus.dto.AddressDTO;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.service.impl.AddressService;
+import org.iti.ecomus.util.validation.OnUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,13 +28,13 @@ public class AddressController {
     }
 
     @PostMapping
-    public ResponseEntity<AddressDTO> createAddress(@AuthenticationPrincipal User user, @RequestBody AddressDTO addressDTO) {
+    public ResponseEntity<AddressDTO> createAddress(@AuthenticationPrincipal User user,@Validated @RequestBody AddressDTO addressDTO) {
         AddressDTO createdAddress = addressService.addAddress(user.getUserId(), addressDTO);
         return ResponseEntity.ok(createdAddress);
     }
 
     @PutMapping
-    public ResponseEntity<AddressDTO> updateAddress(@AuthenticationPrincipal User user, @RequestBody AddressDTO addressDTO) {
+    public ResponseEntity<AddressDTO> updateAddress(@AuthenticationPrincipal User user,@Validated(OnUpdate.class) @RequestBody AddressDTO addressDTO) {
         AddressDTO updatedAddress = addressService.updateAddress(user.getUserId(), addressDTO);
         return ResponseEntity.ok(updatedAddress);
     }
