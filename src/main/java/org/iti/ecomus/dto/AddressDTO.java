@@ -17,6 +17,4 @@ public class AddressDTO {
 
     private String buildingNo;
 
-    private Long userId;
-
 }
