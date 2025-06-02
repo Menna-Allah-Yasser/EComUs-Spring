@@ -2,11 +2,15 @@ package org.iti.ecomus.service.impl;
 
 import org.iti.ecomus.dto.CheckOutOrderDTO;
 import org.iti.ecomus.dto.OrderDTO;
+import org.iti.ecomus.dto.PagedResponse;
+import org.iti.ecomus.dto.UserDTO;
 import org.iti.ecomus.entity.Order;
+import org.iti.ecomus.entity.User;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.exceptions.OrderNotFoundException;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.OrderMapper;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.repository.OrderRepo;
 import org.iti.ecomus.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,13 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderDTO> getAllOrders() {
         return orderMapper.toOrderDTO(orderRepo.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    public PagedResponse<OrderDTO> getAllOrders(PagingAndSortingHelper helper, int pageNum, int pageSize,Long userId) {
+        PagedResponse<Order> pagedResponse = helper.getPagedResponse(pageNum, pageSize, orderRepo,userId);
+        PagedResponse<OrderDTO> resp = pagedResponse.mapContent(orderMapper::toOrderDTO);
+        return resp;
     }
 
 

@@ -1,11 +1,10 @@
-package org.iti.ecomus.service;
+package org.iti.ecomus.service.impl;
 
 import org.iti.ecomus.dto.AddressDTO;
 import org.iti.ecomus.entity.*;
 import org.iti.ecomus.exceptions.BadRequestException;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.repository.*;
-import org.iti.ecomus.service.impl.AddressService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +33,7 @@ public class AddressServiceTest {
 
     private User savedUser;
 
-    private Address saved;
+    private AddressDTO saved;
 
     private AddressDTO dto;
 
@@ -56,9 +55,9 @@ public class AddressServiceTest {
         dto.setArea("Nasr City");
         dto.setStreet("Street 10");
         dto.setBuildingNo("A1");
-        dto.setUserId(savedUser.getUserId());
 
-        saved = addressService.addAddress(dto);
+
+        saved = addressService.addAddress(savedUser.getUserId(),dto);
     }
 
     @Nested
@@ -73,24 +72,21 @@ public class AddressServiceTest {
         @Test
         void shouldThrowWhenDTOIsNull() {
             assertThrows(BadRequestException.class, () -> {
-                addressService.addAddress(null);
+                addressService.addAddress(savedUser.getUserId(),null);
             });
         }
 
         @Test
         void shouldThrowWhenUserIdIsInvalid() {
-            dto.setUserId(-1L);
             assertThrows(BadRequestException.class, () -> {
-                addressService.addAddress(dto);
+                addressService.addAddress(-1L,dto);
             });
         }
 
         @Test
         void shouldThrowWhenUserNotFound() {
-            dto.setUserId(99999L);
-
             assertThrows(ResourceNotFoundException.class, () -> {
-                addressService.addAddress(dto);
+                addressService.addAddress(99999L,dto);
             });
         }
     }
@@ -114,9 +110,8 @@ public class AddressServiceTest {
             dto.setArea("New Area");
             dto.setStreet("New Street");
             dto.setBuildingNo("New Building");
-            dto.setUserId(savedUser.getUserId());
 
-            addressService.updateAddress(dto);
+            addressService.updateAddress(savedUser.getUserId(),dto);
 
             Address updated = addressRepo.findById(saved.getId()).orElseThrow();
             assertEquals("New City", updated.getCity());
@@ -130,7 +125,7 @@ public class AddressServiceTest {
         @Test
         void shouldThrowWhenDTOIsNull() {
             assertThrows(BadRequestException.class,
-                    () -> addressService.updateAddress(null));
+                    () -> addressService.updateAddress(savedUser.getUserId(),null));
         }
 
         @Test
@@ -139,7 +134,7 @@ public class AddressServiceTest {
             dto.setCity("Test");
 
             assertThrows(BadRequestException.class,
-                    () -> addressService.updateAddress(dto));
+                    () -> addressService.updateAddress(null,dto));
         }
     }
 
@@ -175,7 +170,7 @@ public class AddressServiceTest {
             address.setUser(savedUser);
             Address saved = addressRepo.save(address);
 
-            addressService.deleteAddress(saved.getId());
+            addressService.deleteAddress(savedUser.getUserId() ,saved.getId());
 
             Optional<Address> result = addressRepo.findById(saved.getId());
             assertTrue(result.isEmpty());

@@ -1,6 +1,9 @@
 package org.iti.ecomus.service;
 
 import org.iti.ecomus.dto.CartDTO;
+import org.iti.ecomus.dto.PagedResponse;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
+
 import java.util.List;
 
 public interface CartService {
@@ -18,5 +21,7 @@ public interface CartService {
     Integer getTotalQuantity(Long userId);
 
     Integer getTotalPrice(Long userId);
+    Integer getProductTotalPrice(Long userId, Long productId);
 
+    PagedResponse<CartDTO> getall(PagingAndSortingHelper helper, int pageNum, int pageSize, Long userId);
 }

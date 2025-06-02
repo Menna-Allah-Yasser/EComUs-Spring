@@ -28,4 +28,6 @@ public class OrderDTO {
     private PayType payType;
 
     private List<OrderDetailsDTO> orderDetails;
+
+    private Long userId;
 }

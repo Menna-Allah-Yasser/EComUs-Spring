@@ -1,5 +1,7 @@
 package org.iti.ecomus.controller.customer;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.iti.ecomus.dto.ChangePasswordDTO;
 import org.iti.ecomus.dto.UpdateProfileDTO;
 import org.iti.ecomus.dto.UserDTO;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/public/users")
+@SecurityRequirement(name = "E-Commerce Application")
+@Tag(name = "Customer - Profile", description = "Customer profile management")
 public class UserController {
 
     @Autowired

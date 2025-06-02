@@ -1,6 +1,7 @@
 package org.iti.ecomus.config.security;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "User authentication, registration and refresh token Generation")
 public class AuthController {
     @Autowired
     UserDetailsManager userDetailsManager;

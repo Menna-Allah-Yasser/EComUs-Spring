@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,7 +15,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "product")
-@Data
+@Getter
+@Setter
 public class Product implements Serializable {
 
     @Id
@@ -34,7 +39,16 @@ public class Product implements Serializable {
 //    @Min(1)
     private BigDecimal price;
 
-    @ManyToMany(mappedBy = "products") // "products" is the name of the field in Category
+    @Formula("(SELECT COALESCE(SUM(od.quantity), 0) FROM orderdetails od WHERE od.productId = productId)")
+    private Long purchaseCount;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "productcategory",
+        joinColumns = @JoinColumn(name = "productId"),
+        inverseJoinColumns = @JoinColumn(name = "categoryId")
+    )
+    @JsonBackReference // Avoid recursion during serialization
     private List<Category> categories;
 
     public Product() {}
