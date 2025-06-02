@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/public/cart")
 @RequiredArgsConstructor
 @Validated
-@SecurityRequirement(name = "E-Commerce Application")
+@SecurityRequirement(name = "BearerAuth")
 @Tag(name = "Customer - Cart", description = "Customer shopping cart management")
 public class CartController {
 

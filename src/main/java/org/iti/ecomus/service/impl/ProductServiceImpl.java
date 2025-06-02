@@ -1,5 +1,7 @@
 package org.iti.ecomus.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
+import org.iti.ecomus.client.imageStorage.ImageStorageClient;
 import org.iti.ecomus.dto.NewProductDTO;
 import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ProductDTO;
@@ -12,16 +14,20 @@ import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.repository.CategoryRepo;
 import org.iti.ecomus.repository.ProductRepo;
 import org.iti.ecomus.service.ProductService;
+import org.iti.ecomus.util.Uploader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
+
 
     @Autowired
     private ProductRepo productRepo;
@@ -34,7 +40,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private NewProductMapper newProductMapper;
-    
+
+    @Autowired
+    private ImageStorageClient imageStorageClient;
+
+    @Autowired
+    private Uploader uploader;
 
     @Override
     public ProductDTO getProductById(Long productId){
@@ -83,6 +94,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> findByProductName(String name) {
         return productMapper.toProductDTO(productRepo.findByProductName(name));
+    }
+
+    @Override
+    public void uploadProductImages(Long productId, MultipartFile[] images) {
+        uploader.batchUploadAsync("product",productId, images);
+    }
+
+
+
+    @Override
+    public List<String> getProductImages(Long productId) {
+//        String prefix = "product/" + productId + "/";
+        return imageStorageClient.getAllImages("product", productId.toString());
     }
 
     

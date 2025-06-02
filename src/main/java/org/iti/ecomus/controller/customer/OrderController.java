@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/public/orders")
-@SecurityRequirement(name = "E-Commerce Application")
+@SecurityRequirement(name = "BearerAuth")
 @Tag(name = "Customer - Orders", description = "Customer order management")
 public class OrderController {
 

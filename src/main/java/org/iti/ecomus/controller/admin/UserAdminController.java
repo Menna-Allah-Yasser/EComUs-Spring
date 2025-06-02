@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/users")
-@SecurityRequirement(name = "E-Commerce Application")
+@SecurityRequirement(name = "BearerAuth")
 @Tag(name = "Admin - Users", description = "Admin user management")
 public class UserAdminController {
 

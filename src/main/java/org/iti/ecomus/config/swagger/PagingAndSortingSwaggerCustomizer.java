@@ -1,8 +1,9 @@
-package org.iti.ecomus.config;
+package org.iti.ecomus.config.swagger;
 
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.enums.OrderStatus;
 import org.iti.ecomus.enums.PayType;
 import org.iti.ecomus.enums.UserRole;
