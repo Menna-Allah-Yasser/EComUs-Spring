@@ -4,6 +4,7 @@ import jakarta.annotation.security.RolesAllowed;
 import org.iti.ecomus.enums.UserRole;
 import org.iti.ecomus.mappers.UserMapper;
 import org.iti.ecomus.repository.UserRepo;
+import org.iti.ecomus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.repository.query.Param;
@@ -25,6 +26,9 @@ public class UserController2 {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/{id}")
     @PreAuthorize("#user.userId == #id")
