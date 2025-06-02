@@ -7,6 +7,7 @@ import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -37,6 +38,9 @@ public class Product implements Serializable {
     @Column(name = "price", nullable = false)
 //    @Min(1)
     private BigDecimal price;
+
+    @Formula("(SELECT COALESCE(SUM(od.quantity), 0) FROM orderdetails od WHERE od.productId = productId)")
+    private Long purchaseCount;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

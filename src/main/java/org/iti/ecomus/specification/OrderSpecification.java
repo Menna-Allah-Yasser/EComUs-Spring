@@ -23,16 +23,12 @@ public class OrderSpecification {
         return (root, query, criteriaBuilder) -> {
             if (keyword == null || keyword.trim().isEmpty()) return null;
 
-            Join<Product, Category> categoryJoin = root.join("categories");
 
             String likePattern = "%" + keyword.toLowerCase() + "%";
             return criteriaBuilder.or(
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("address")), likePattern),
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("price")), likePattern),
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("status")), likePattern),
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("payType")), likePattern),
-
-                    criteriaBuilder.like(criteriaBuilder.lower(categoryJoin.get("categoryName")), likePattern)
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("payType")), likePattern)
             );
         };
     }

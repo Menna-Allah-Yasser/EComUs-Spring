@@ -89,6 +89,9 @@ public class PagingAndSortingHelper {
         response.setSortField(this.sortField);
         response.setSortDir(this.sortDir);
         response.setKeyword(this.keyword);
+        if(this.keyword==null) {
+            response.setKeyword("");
+        }
         response.setSearchParams(this.searchParams);
         response.setAllowedSortFields(this.allowedSortFields);
 

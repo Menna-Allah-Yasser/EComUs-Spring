@@ -26,8 +26,8 @@ public class CartSpecification {
 
             String likePattern = "%" + keyword.toLowerCase() + "%";
             return criteriaBuilder.or(
-                    criteriaBuilder.like(criteriaBuilder.lower(categoryJoin.get("productName")), likePattern),
-                    criteriaBuilder.like(criteriaBuilder.lower(categoryJoin.get("description")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(productJoin.get("productName")), likePattern),
+                    criteriaBuilder.like(criteriaBuilder.lower(productJoin.get("description")), likePattern),
                     criteriaBuilder.like(criteriaBuilder.lower(categoryJoin.get("categoryName")), likePattern)
             );
         };

@@ -3,6 +3,7 @@ package org.iti.ecomus.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.iti.ecomus.dto.CategoryDTO;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,7 +43,7 @@ public class CategoryControllerIntegrationTest {
 
     @Test
     public void getAllCategories_ShouldReturnCategories() throws Exception {
-        mockMvc.perform(get("/api/customer/category"))
+        mockMvc.perform(get("/api/public/category"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray());
@@ -62,7 +63,7 @@ public class CategoryControllerIntegrationTest {
 
         CategoryDTO created = objectMapper.readValue(result.getResponse().getContentAsString(), CategoryDTO.class);
 
-        mockMvc.perform(get("/api/customer/category/" + created.getCategoryId()))
+        mockMvc.perform(get("/api/public/category/" + created.getCategoryId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.categoryId").value(created.getCategoryId()))

@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.iti.ecomus.dto.CartDTO;
-import org.iti.ecomus.dto.OrderDTO;
 import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.entity.Cart;
-import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.entity.Product;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.exceptions.ProductNotFoundException;

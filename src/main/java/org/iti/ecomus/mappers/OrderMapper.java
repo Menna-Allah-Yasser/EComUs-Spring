@@ -3,12 +3,15 @@ package org.iti.ecomus.mappers;
 import org.iti.ecomus.dto.OrderDTO;
 import org.iti.ecomus.entity.Order;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring",
         uses = {OrderDetailsMapper.class})
 public interface OrderMapper {
+
+    @Mapping(target = "userId", source = "user.userId")
     OrderDTO toOrderDTO(Order order);
     Order toOrder(OrderDTO orderDTO);
 
