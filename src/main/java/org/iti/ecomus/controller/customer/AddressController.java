@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/public/address")
-@SecurityRequirement(name = "E-Commerce Application")
+@SecurityRequirement(name = "BearerAuth")
 @Tag(name = "Customer - Addresses", description = "Customer address management")
 public class AddressController {
 

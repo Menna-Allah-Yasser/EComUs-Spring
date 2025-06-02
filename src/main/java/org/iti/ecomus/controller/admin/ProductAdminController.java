@@ -1,9 +1,15 @@
 package org.iti.ecomus.controller.admin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.NewProductDTO;
 import org.iti.ecomus.dto.PagedResponse;
@@ -15,15 +21,19 @@ import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.paging.PagingAndSortingParam;
 import org.iti.ecomus.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/admin/products")
-@SecurityRequirement(name = "E-Commerce Application")
+@SecurityRequirement(name = "BearerAuth")
 @Tag(name = "Admin - Products", description = "Admin product management")
 public class ProductAdminController {
 
@@ -31,7 +41,8 @@ public class ProductAdminController {
     private ProductService productService;
 
     @Autowired
-    private NewProductMapper newProductMapper;
+    private Validator validator;
+
 
     @GetMapping
     public ResponseEntity<PagedResponse<ProductDTO>> getProducts(@PagingAndSortingParam(
@@ -53,10 +64,28 @@ public class ProductAdminController {
         return ResponseEntity.ok(productService.findByProductName(name));
     }
 
-    @PostMapping()
-    public ResponseEntity<Long> addProduct(@RequestBody @Valid NewProductDTO product) {
+    @PostMapping(
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<Long> addProduct(@RequestPart("product") @Valid @JsonFormat String productJson, @RequestPart("images") MultipartFile[] images) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        NewProductDTO product = objectMapper.readValue(productJson, NewProductDTO.class);
+
+        Set<ConstraintViolation<NewProductDTO>> violations = validator.validate(product);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+
         Long productId = productService.addProductWithCategories(product);
+        productService.uploadProductImages(productId, images);
         return ResponseEntity.ok(productId);
+    }
+
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<String>> getProductImages(@PathVariable("id") Long id) {
+        List<String> images = productService.getProductImages(id);
+        return ResponseEntity.ok(images);
     }
 
     @PutMapping("/{id}")
