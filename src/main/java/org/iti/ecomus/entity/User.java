@@ -25,6 +25,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EqualsAndHashCode
 @ToString(exclude = {"addresses", "orders", "carts"})
 @NamedQuery(query = "SELECT u FROM User u WHERE u.userName = :userName", name = "User.findByUserName")
+@Cacheable
+@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
 public class User implements Serializable, UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
