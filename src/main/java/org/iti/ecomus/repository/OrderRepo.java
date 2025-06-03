@@ -18,10 +18,6 @@ public interface OrderRepo extends JpaRepository<Order, Long>, SearchRepository<
 
     boolean existsByOrderIdAndUser_UserId(Long orderId, Long userId);
 
-    @Override
-    default public Specification<Order> getKeywordSpecification(String keyword) {
-        return OrderSpecification.containsKeyword(keyword);
-    }
 
     @Override
     default public Specification<Order> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {

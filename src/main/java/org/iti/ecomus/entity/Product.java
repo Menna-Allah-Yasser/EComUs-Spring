@@ -17,6 +17,8 @@ import java.util.List;
 @Table(name = "product")
 @Getter
 @Setter
+@Cacheable
+@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
 public class Product implements Serializable {
 
     @Id
