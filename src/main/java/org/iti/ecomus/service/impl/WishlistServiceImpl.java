@@ -2,13 +2,14 @@ package org.iti.ecomus.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.iti.ecomus.dto.WishlistDTO;
-import org.iti.ecomus.entity.Product;
-import org.iti.ecomus.entity.User;
-import org.iti.ecomus.entity.Wishlist;
+import org.iti.ecomus.entity.*;
+import org.iti.ecomus.exceptions.ResourceNotFoundException;
+import org.iti.ecomus.mappers.WishlistMapper;
 import org.iti.ecomus.repository.ProductRepo;
 import org.iti.ecomus.repository.UserRepo;
 import org.iti.ecomus.repository.WishlistRepo;
 import org.iti.ecomus.service.WishlistService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,49 +21,47 @@ import java.util.stream.Collectors;
 @Transactional
 public class WishlistServiceImpl implements WishlistService {
 
-    private final WishlistRepo wishlistRepo;
-    private final UserRepo userRepo;
-    private final ProductRepo productRepo;
+    @Autowired
+    private WishlistRepo wishlistRepo;
+
+    @Autowired
+    private ProductRepo productRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private WishlistMapper wishlistMapper;
 
     @Override
-    public void addToWishlist(Long userId, Long productId) {
-        if (!wishlistRepo.existsByUserIdAndProductId(userId, productId)) {
-            User user = userRepo.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            Product product = productRepo.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            Wishlist wishlist = new Wishlist(productId, product, user);
-            wishlist.setUserId(userId);
-            wishlistRepo.save(wishlist);
-        }
-    }
-
-    @Override
-    public void removeFromWishlist(Long userId, Long productId) {
-        wishlistRepo.deleteByUserIdAndProductId(userId, productId);
-    }
-
-    @Override
-    public List<WishlistDTO> getUserWishlist(Long userId) {
-        return wishlistRepo.findByUserId(userId)
-                .stream()
-                .map(this::convertToDTO)
+    public List<WishlistDTO> getAllByUserId(Long userId) {
+        return wishlistRepo.findByUserUserId(userId).stream()
+                .map( wishlistMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean isProductInWishlist(Long userId, Long productId) {
-        return wishlistRepo.existsByUserIdAndProductId(userId, productId);
+    public WishlistDTO getByUserIdProductId(Long userId, Long productId) {
+        WishlistPK pk = new WishlistPK(userId, productId);
+        Wishlist wishlist = wishlistRepo.findById(pk)
+                .orElseThrow(() -> new ResourceNotFoundException("Wishlist item not found"));
+        return wishlistMapper.toDTO(wishlist);
     }
 
-    private WishlistDTO convertToDTO(Wishlist wishlist) {
-        WishlistDTO dto = new WishlistDTO();
-        dto.setUserId(wishlist.getUserId());
-        dto.setProductId(wishlist.getProductId());
-        dto.setProductName(wishlist.getProduct().getProductName());     // adjust based on your field name
-//        dto.setProductPrice(wishlist.getProduct().getPrice());         // adjust based on your field name
-//        dto.setProductImage(wishlist.getProduct().getProductImage());  // adjust based on your field name
-        return dto;
+    @Override
+    public WishlistDTO add(Long userId, Long productId) {
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        Wishlist wishlist = new Wishlist(userId, productId, user, product);
+
+        Wishlist saved = wishlistRepo.save(wishlist);
+        return wishlistMapper.toDTO(saved) ;
+    }
+
+    @Override
+    public void delete(Long userId, Long productId) {
+        wishlistRepo.deleteById(new WishlistPK(userId, productId));
     }
 }

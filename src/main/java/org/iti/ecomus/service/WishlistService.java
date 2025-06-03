@@ -4,8 +4,8 @@ import org.iti.ecomus.dto.WishlistDTO;
 import java.util.List;
 
 public interface WishlistService {
-    void addToWishlist(Long userId, Long productId);
-    void removeFromWishlist(Long userId, Long productId);
-    List<WishlistDTO> getUserWishlist(Long userId);
-    boolean isProductInWishlist(Long userId, Long productId);
+    List<WishlistDTO> getAllByUserId(Long userId);
+    WishlistDTO getByUserIdProductId(Long userId, Long productId);
+    WishlistDTO add(Long userId, Long productId);
+    void delete(Long userId, Long productId);
 }
