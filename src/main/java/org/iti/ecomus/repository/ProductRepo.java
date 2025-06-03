@@ -22,10 +22,7 @@ public interface ProductRepo extends JpaRepository<Product, Long>, SearchReposit
 
     Boolean existsByProductId(Long productId);
 
-    @Override
-    default public Specification<Product> getKeywordSpecification(String keyword) {
-        return ProductSpecification.containsKeyword(keyword);
-    }
+
 
     @Override
     default public Specification<Product> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {

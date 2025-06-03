@@ -39,10 +39,6 @@ public interface CartRepo extends JpaRepository<Cart, CartPK> , SearchRepository
     @Query("SELECT (c.quantity * c.product.price) FROM Cart c WHERE c.user.userId = :userId AND c.product.productId = :productId")
 Integer calculateProductTotalInCart(@Param("userId") Long userId, @Param("productId") Long productId);
 
-    @Override
-    default public Specification<Cart> getKeywordSpecification(String keyword) {
-        return CartSpecification.containsKeyword(keyword);
-    }
 
     @Override
     default public Specification<Cart> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {

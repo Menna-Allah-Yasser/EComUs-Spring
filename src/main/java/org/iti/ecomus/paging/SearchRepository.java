@@ -16,22 +16,14 @@ public interface SearchRepository<T, ID> extends PagingAndSortingRepository<T, I
 
 //    Page<T> findAllWithFilters(String keyword, Map<String, Object> searchParams, Pageable pageable);
 
-    @Query("SELECT e FROM #{#entityName} e")
-    default Page<T> searchWithKeyword(String keyword, Pageable pageable){
-        if (keyword == null || keyword.trim().isEmpty()) {
-            return findAll(pageable);
-        }
-        // This will use the JpaSpecificationExecutor's findAll method
-        return findAll(getKeywordSpecification(keyword), pageable);
-    }
 
-    @Query("SELECT e FROM #{#entityName} e")
+
+
     default Page<T> searchWithFilters(String keyword, Map<String, Object> searchParams, Pageable pageable) {
         return findAll(getFiltersSpecification(keyword, searchParams), pageable);
     }
 
-    // Abstract methods that must be implemented by the concrete repository
-    Specification<T> getKeywordSpecification(String keyword);
+
     Specification<T> getFiltersSpecification(String keyword, Map<String, Object> searchParams);
 
 

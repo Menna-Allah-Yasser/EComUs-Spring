@@ -7,6 +7,8 @@ import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
 
 import java.io.Serializable;
@@ -17,6 +19,8 @@ import java.util.List;
 @Table(name = "product")
 @Getter
 @Setter
+@Cacheable
+@org.hibernate.annotations.Cache(usage = org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE)
 public class Product implements Serializable {
 
     @Id
@@ -43,6 +47,7 @@ public class Product implements Serializable {
     private Long purchaseCount;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
     @JoinTable(
         name = "productcategory",
         joinColumns = @JoinColumn(name = "productId"),

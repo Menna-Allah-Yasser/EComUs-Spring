@@ -28,10 +28,6 @@ public interface UserRepo extends JpaRepository<User, Long>, SearchRepository<Us
 
     boolean existsByEmail(String email);
 
-    @Override
-    default public Specification<User> getKeywordSpecification(String keyword) {
-        return UserSpecification.containsKeyword(keyword);
-    }
 
     @Override
     default public Specification<User> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {
