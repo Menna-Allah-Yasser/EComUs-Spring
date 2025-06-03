@@ -1,11 +1,22 @@
 package org.iti.ecomus.mappers;
 
 import org.iti.ecomus.dto.WishlistDTO;
-import org.iti.ecomus.entity.Wishlist;
-import org.mapstruct.Mapper;
+import org.iti.ecomus.entity.*;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring" , uses = {ProductMapper.class, UserMapper.class})
 public interface WishlistMapper {
-    WishlistDTO toWishlistDTO(Wishlist wishlist);
-    Wishlist toWishlist(WishlistDTO wishlistDTO);
+    @Mapping(source = "user.userId", target = "userId")
+    @Mapping(source = "product.productId", target = "productId")
+    @Mapping(source = "product.productName", target = "productName")
+    @Mapping(source = "product.price", target = "productPrice")
+    WishlistDTO toDTO(Wishlist wishlist);
+
+
+    Wishlist toEntity(WishlistDTO dto);
+
+    List<WishlistDTO> toDTOList(List<Wishlist> entities);
+    List<Wishlist> toEntityList(List<WishlistDTO> dtos);
 }
