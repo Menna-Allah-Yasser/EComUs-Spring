@@ -6,7 +6,10 @@ import org.iti.ecomus.entity.Product;
 import org.iti.ecomus.paging.SearchRepository;
 import org.iti.ecomus.specification.OrderSpecification;
 import org.iti.ecomus.specification.ProductSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -20,7 +23,7 @@ public interface OrderRepo extends JpaRepository<Order, Long>, SearchRepository<
 
 
     @Override
-    default public Specification<Order> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {
+    default Specification<Order> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {
         return OrderSpecification.build(keyword, searchParams);
     }
 }
