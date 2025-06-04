@@ -113,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public Long addProductWithCategories(NewProductDTO newProductDTO) {
+    public ProductDTO addProductWithCategories(NewProductDTO newProductDTO) {
         Product product = new Product();
         product.setProductName(newProductDTO.getProductName());
         product.setDescription(newProductDTO.getDescription());
@@ -138,6 +138,6 @@ public class ProductServiceImpl implements ProductService {
 
         Product savedProduct = productRepo.save(product);
 
-        return savedProduct.getProductId();
+        return productMapper.toProductDTO( savedProduct);
     }
 }

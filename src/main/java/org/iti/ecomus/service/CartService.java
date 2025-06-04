@@ -12,9 +12,9 @@ public interface CartService {
 
     CartDTO getCartItem(Long userId, Long productId);
 
-    void addOrUpdateCartItem(Long userId, Long productId, int quantity);
+    CartDTO addOrUpdateCartItem(Long userId, Long productId, int quantity);
 
-    void removeOrUpdateCartItem(Long userId, Long productId, int quantity);
+    CartDTO removeOrUpdateCartItem(Long userId, Long productId, int quantity);
 
     void removeCartItem(Long userId, Long productId);
 

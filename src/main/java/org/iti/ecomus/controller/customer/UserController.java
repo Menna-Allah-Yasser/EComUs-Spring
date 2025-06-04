@@ -2,14 +2,17 @@ package org.iti.ecomus.controller.customer;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.iti.ecomus.dto.ChangePasswordDTO;
 import org.iti.ecomus.dto.UpdateProfileDTO;
 import org.iti.ecomus.dto.UserDTO;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,23 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/public/users")
 @SecurityRequirement(name = "BearerAuth")
 @Tag(name = "Customer - Profile", description = "Customer profile management")
+@Validated
 public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping("/profile")
+    @GetMapping(path = "/profile",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDTO> profile(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok( userService.getUserById(user.getUserId()));
     }
 
-    @PutMapping("/profile")
-    public ResponseEntity<UserDTO> updateProfile(@AuthenticationPrincipal User user, UpdateProfileDTO userDTO) {
+    @PutMapping(path = "/profile",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDTO> updateProfile(@AuthenticationPrincipal User user,@Valid UpdateProfileDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(user, userDTO));
     }
 
-    @PutMapping("/profile/password")
-    public ResponseEntity<String> updatePassword(@AuthenticationPrincipal User user, ChangePasswordDTO changePasswordDTO) {
+    @PutMapping(path = "/profile/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updatePassword(@AuthenticationPrincipal User user,@Valid ChangePasswordDTO changePasswordDTO) {
         userService.updatePassword(changePasswordDTO);
         return ResponseEntity.ok("Password updated successfully");
     }

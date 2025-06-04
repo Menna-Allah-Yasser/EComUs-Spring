@@ -53,8 +53,8 @@ public class AuthController {
     private MailMessenger mailMessenger;
 
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid UserSignUpDTO signupDTO,  HttpServletResponse response) {
+    @PostMapping(path = "/register", produces = "application/json")
+    public ResponseEntity<Token> register(@RequestBody @Valid UserSignUpDTO signupDTO,  HttpServletResponse response) {
         User user = userMapper.toUserFromSignUp(signupDTO);
         userDetailsManager.createUser(user);
 
@@ -73,8 +73,8 @@ public class AuthController {
 
 
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserSignInDTO loginDTO,HttpServletResponse response) {
+    @PostMapping(path = "/login", produces = "application/json")
+    public ResponseEntity<Token> login(@RequestBody @Valid UserSignInDTO loginDTO,HttpServletResponse response) {
         Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.getEmail(), loginDTO.getPassword()));
 
         Token token = tokenGenerator.createToken(authentication);
@@ -85,8 +85,8 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/token")
-    public ResponseEntity token(HttpServletRequest request, HttpServletResponse response) {
+    @PostMapping(path = "/token", produces = "application/json")
+    public ResponseEntity<Token> token(HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = getRefreshTokenFromCookie(request);
 

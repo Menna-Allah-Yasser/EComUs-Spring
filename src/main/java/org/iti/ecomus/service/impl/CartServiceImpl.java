@@ -64,7 +64,7 @@ public class CartServiceImpl implements CartService {
         return cartMapper.toCartDTO(cart);
     }
 @Override
-public void addOrUpdateCartItem(Long userId, Long productId, int quantity) {
+public CartDTO addOrUpdateCartItem(Long userId, Long productId, int quantity) {
     User user = userRepo.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     Product product = productRepo.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
@@ -79,14 +79,15 @@ public void addOrUpdateCartItem(Long userId, Long productId, int quantity) {
     } else {
         cart.setQuantity(cart.getQuantity() + quantity);
     }
-    cartRepo.save(cart);
+    Cart save = cartRepo.save(cart);
+    return cartMapper.toCartDTO(save);
 }
 
     @Override
-    public void removeOrUpdateCartItem(Long userId, Long productId, int quantity) {
+    public CartDTO removeOrUpdateCartItem(Long userId, Long productId, int quantity) {
 //        User user = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
 //        Product product = productRepo.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-
+        CartDTO cartDTO= new CartDTO();
         if(!userRepo.existsById(userId)){
             throw new UsernameNotFoundException("User not found");
         }
@@ -106,8 +107,9 @@ public void addOrUpdateCartItem(Long userId, Long productId, int quantity) {
         } else {
             // Update the quantity if it is still positive
             cart.setQuantity(newQuantity);
-            cartRepo.save(cart);
+            cartDTO = cartMapper.toCartDTO(cartRepo.save(cart));
         }
+        return cartDTO;
     }
 
     @Override
