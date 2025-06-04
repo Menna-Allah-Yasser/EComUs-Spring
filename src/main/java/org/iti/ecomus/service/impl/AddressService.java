@@ -121,7 +121,7 @@ public class AddressService {
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found."));
 
         if (!address.getUser().getUserId().equals(userId)) {
-            throw new UnauthorizedException("You are not authorized to delete this address.");
+            throw new ForbiddenException("You are not authorized to delete this address.");
         }
 
         addressRepo.delete(address);

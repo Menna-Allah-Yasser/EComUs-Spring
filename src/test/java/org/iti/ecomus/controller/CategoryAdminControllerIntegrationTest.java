@@ -114,7 +114,7 @@ public class CategoryAdminControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/admin/category/" + savedCategory.getCategoryId())
                         .with(csrf()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/admin/category/" + savedCategory.getCategoryId()))
                 .andExpect(status().isNotFound());

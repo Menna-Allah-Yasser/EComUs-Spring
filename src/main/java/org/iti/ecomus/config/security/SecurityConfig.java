@@ -31,8 +31,11 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.*;
 import static org.springframework.security.config.annotation.web.builders.HttpSecurity.*;
@@ -61,7 +64,17 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable())
+                .cors(cors -> cors
+                        .configurationSource(request -> {
+                            CorsConfiguration configuration = new CorsConfiguration();
+                            configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+                            configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                            configuration.setAllowedHeaders(Arrays.asList("*"));
+                            configuration.setAllowCredentials(true);
+                            configuration.setMaxAge(3600L);
+                            return configuration;
+                        }))
+
                 .httpBasic(basic -> basic.disable())
                 .oauth2ResourceServer((oauth2) ->
                         oauth2.jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtToUserConverter))

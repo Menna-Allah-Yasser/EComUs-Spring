@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.cache.CacheManager;
@@ -36,6 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
                 provider.getDefaultProperties()
         );
 
+
 //        CacheConfigurationBuilder<String, String> configuration =
 //                CacheConfigurationBuilder.newCacheConfigurationBuilder(
 //                                String.class,
@@ -51,6 +53,18 @@ public class WebConfig implements WebMvcConfigurer {
         return cacheManager;
 
     }
+
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedOriginPatterns("*")
+//                .allowedOrigins("http://localhost:4200", "http://127.0.0.1:4200")
+//                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+//                .allowedHeaders("*")
+//                .allowCredentials(true)
+//                .maxAge(3600);
+//    }
+
 //    @Bean
 //    public CacheManager springCacheManager(CacheManager cm) {
 //        return new JCacheCacheManager(cm);
