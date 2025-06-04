@@ -1,5 +1,6 @@
 package org.iti.ecomus.mappers;
 
+import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.dto.WishlistDTO;
 import org.iti.ecomus.entity.*;
 import org.mapstruct.*;
@@ -19,4 +20,10 @@ public interface WishlistMapper {
 
     List<WishlistDTO> toDTOList(List<Wishlist> entities);
     List<Wishlist> toEntityList(List<WishlistDTO> dtos);
+
+    @Mapping(target = ".",source = "product")
+    ProductDTO wishlistToProductDTO(Wishlist wishlist);
+
+
+    List<ProductDTO> wishlistToProductDTO(List<Wishlist> wishlists);
 }

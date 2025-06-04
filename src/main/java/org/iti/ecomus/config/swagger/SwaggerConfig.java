@@ -63,6 +63,7 @@ public class SwaggerConfig {
                 .externalDocs(new ExternalDocumentation().description("E-Commerce App Documentation")
                         .url("http://localhost:8080/swagger-ui/index.html"))
         .tags(Arrays.asList(
+                                new Tag().name("Authentication").description("User authentication and registration"),
                                 new Tag().name("Admin").description("Administrative operations"),
                                 new Tag().name("Admin - Users").description("Admin user management"),
                                 new Tag().name("Admin - Products").description("Admin product management"),
@@ -74,7 +75,8 @@ public class SwaggerConfig {
                                 new Tag().name("Customer - Profile").description("Customer profile management"),
                         new Tag().name("Customer - Cart").description("Shopping cart operations"),
                         new Tag().name("Customer - Addresses").description("Customer address management"),
-                                new Tag().name("Authentication").description("User authentication and registration")
+                new Tag().name("Customer - Wishlist").description( "Customer wishlist"),
+                new Tag().name("Customer - Categories").description("Customer category browsing")
                         ));
     }
 

@@ -1,10 +1,13 @@
 package org.iti.ecomus.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.iti.ecomus.dto.PagedResponse;
+import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.dto.WishlistDTO;
 import org.iti.ecomus.entity.*;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.WishlistMapper;
+import org.iti.ecomus.paging.PagingAndSortingHelper;
 import org.iti.ecomus.repository.ProductRepo;
 import org.iti.ecomus.repository.UserRepo;
 import org.iti.ecomus.repository.WishlistRepo;
@@ -49,7 +52,7 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public WishlistDTO add(Long userId, Long productId) {
+    public ProductDTO add(Long userId, Long productId) {
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
         User user = userRepo.findById(userId)
@@ -57,11 +60,19 @@ public class WishlistServiceImpl implements WishlistService {
         Wishlist wishlist = new Wishlist(userId, productId, user, product);
 
         Wishlist saved = wishlistRepo.save(wishlist);
-        return wishlistMapper.toDTO(saved) ;
+        return wishlistMapper.wishlistToProductDTO(saved) ;
     }
 
     @Override
     public void delete(Long userId, Long productId) {
         wishlistRepo.deleteById(new WishlistPK(userId, productId));
+    }
+
+    @Override
+    public PagedResponse<ProductDTO> getall(PagingAndSortingHelper helper, int pageNum, int pageSize, Long userId) {
+        PagedResponse<Wishlist> pagedResponse = helper.getPagedResponse(pageNum, pageSize, wishlistRepo, userId);
+        PagedResponse<ProductDTO> resp = pagedResponse.mapContent(wishlistMapper::wishlistToProductDTO);
+        return resp;
+
     }
 }

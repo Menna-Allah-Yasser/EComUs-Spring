@@ -49,6 +49,7 @@ public class PagingAndSortingHelper {
 
         try {
 
+//                System.out.println(pageable.getSort() + " " + pageable.getPageSize() + " " + pageable.getPageNumber() + " " +pageable);
             if ((keyword != null && !keyword.trim().isEmpty()) ||
                     (searchParams != null && !searchParams.isEmpty())) {
 //                System.out.println(keyword + " " + searchParams);

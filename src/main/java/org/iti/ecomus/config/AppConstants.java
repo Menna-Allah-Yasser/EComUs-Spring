@@ -24,6 +24,7 @@ public class AppConstants {
     public static final String PRODUCT_MODEL = "products";
     public static final String CART_MODEL = "carts";
     public static final String ADDRESS_MODEL = "addresses";
+    public static final String WISH_MODEL = "wishes";
 
     //Allowed Fields for Search
     public static final String[] ALLLOWED_USER_SEARCH_FIELDS = {"userId", "userName", "email", "role", "job", "phone", "BD", "creditLimit"};
@@ -31,5 +32,6 @@ public class AppConstants {
     public static final String[] ALLLOWED_PRODUCT_SEARCH_FIELDS = {"productId", "productName", "description", "price","quantity","purchaseCount","categories"};
     public static final String[] ALLLOWED_ADDRESS_SEARCH_FIELDS = {"id", "user", "street", "city", "area", "buildingNo"};
     public static final String[] ALLLOWED_CART_SEARCH_FIELDS = { "userId", "productId","quantity"};
+    public static final String[] ALLLOWED_WISH_SEARCH_FIELDS = { "userId", "productId"};
 
 }
