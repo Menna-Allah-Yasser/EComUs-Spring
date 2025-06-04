@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Validated
 @SecurityRequirement(name = "BearerAuth")
-@Tag(name = "Customer - Cart", description = "Customer shopping cart management")
+@Tag(name = "Customer - Cart", description = "Shopping cart operations")
 public class CartController {
 
     private final CartService cartService;

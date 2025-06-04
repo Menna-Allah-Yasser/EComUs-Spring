@@ -59,11 +59,11 @@ public class SwaggerConfig {
                         .description("Backend APIs for E-Commerce app")
                         .version("v1.0.0")
                         .contact(new Contact().name("sad name").url("https://sad.com/").email("sad@gmail.com"))
-                        .license(new License().name("License").url("/")))
+                        .license(new License().name("License").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
                 .externalDocs(new ExternalDocumentation().description("E-Commerce App Documentation")
                         .url("http://localhost:8080/swagger-ui/index.html"))
         .tags(Arrays.asList(
-                                new Tag().name("Authentication").description("User authentication and registration"),
+                                new Tag().name("Authentication").description("User authentication, registration and refresh token Generation"),
                                 new Tag().name("Admin").description("Administrative operations"),
                                 new Tag().name("Admin - Users").description("Admin user management"),
                                 new Tag().name("Admin - Products").description("Admin product management"),
