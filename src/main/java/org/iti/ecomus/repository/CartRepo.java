@@ -41,7 +41,7 @@ Integer calculateProductTotalInCart(@Param("userId") Long userId, @Param("produc
 
 
     @Override
-    default public Specification<Cart> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {
+    default Specification<Cart> getFiltersSpecification(String keyword, Map<String, Object> searchParams) {
         return CartSpecification.build(keyword, searchParams);
     }
 

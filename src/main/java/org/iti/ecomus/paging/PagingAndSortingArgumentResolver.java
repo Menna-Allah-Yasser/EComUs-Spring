@@ -76,6 +76,9 @@ public class PagingAndSortingArgumentResolver implements HandlerMethodArgumentRe
             case AppConstants.CART_MODEL:
                 allowedSortFields.addAll(Arrays.asList(AppConstants.ALLLOWED_CART_SEARCH_FIELDS));
                 break;
+            case AppConstants.WISH_MODEL:
+                allowedSortFields.addAll(Arrays.asList(AppConstants.ALLLOWED_WISH_SEARCH_FIELDS));
+                break;
             case AppConstants.ADDRESS_MODEL:
                 allowedSortFields.addAll(Arrays.asList(AppConstants.ALLLOWED_ADDRESS_SEARCH_FIELDS));
                 break;
@@ -83,6 +86,7 @@ public class PagingAndSortingArgumentResolver implements HandlerMethodArgumentRe
                 break;
         }
 //        System.out.println(searchParams);
+//        System.out.println("sortField: " + sortField);
         return new PagingAndSortingHelper(
                 sortField, sortDir, keyword, searchParams, allowedSortFields, annotation.defaultSortField(),annotation.isUser());
     }

@@ -83,6 +83,9 @@ public class PagingAndSortingSwaggerCustomizer implements OperationCustomizer {
             case AppConstants.CART_MODEL:
                 addCartSearchParameters(operation);
                 break;
+            case AppConstants.WISH_MODEL:
+                addWishSearchParameters(operation);
+                break;
         }
     }
 
@@ -142,6 +145,16 @@ public class PagingAndSortingSwaggerCustomizer implements OperationCustomizer {
 
     }
 
+    private void addWishSearchParameters(Operation operation) {
+        operation.addParametersItem(createParameter("productName", "string", "Filter by product name", null, false));
+        operation.addParametersItem(createParameter("description", "string", "Filter by description", null, false));
+        operation.addParametersItem(createParameter("priceMin", "number", "Filter by minimum price", null, false));
+        operation.addParametersItem(createParameter("priceMax", "number", "Filter by maximum price", null, false));
+        operation.addParametersItem(createParameter("categoryId", "string", "Filter by categoryId", null, false));
+        operation.addParametersItem(createParameter("categoryName", "string", "Filter by categoryName", null, false));
+
+    }
+
 
     private Parameter createParameter(String name, String type, String description, String defaultValue, boolean required) {
         Parameter parameter = new Parameter();
@@ -170,6 +183,8 @@ public class PagingAndSortingSwaggerCustomizer implements OperationCustomizer {
                 return new HashSet<>(Arrays.asList(AppConstants.ALLLOWED_ORDER_SEARCH_FIELDS));
             case AppConstants.CART_MODEL:
                 return new HashSet<>(Arrays.asList(AppConstants.ALLLOWED_CART_SEARCH_FIELDS));
+            case AppConstants.WISH_MODEL:
+                return new HashSet<>(Arrays.asList(AppConstants.ALLLOWED_WISH_SEARCH_FIELDS));
             case AppConstants.ADDRESS_MODEL:
                 return new HashSet<>(Arrays.asList(AppConstants.ALLLOWED_ADDRESS_SEARCH_FIELDS));
             default:
@@ -198,6 +213,10 @@ public class PagingAndSortingSwaggerCustomizer implements OperationCustomizer {
                         "productName", "description", "priceMin", "priceMax",
                         "quantityMin", "quantityMax", "categoryId", "categoryName"
                 ));
+            case AppConstants.WISH_MODEL:
+                return new HashSet<>(Arrays.asList(
+                        "productName", "description", "priceMin", "priceMax",
+                        "categoryId", "categoryName"));
             case AppConstants.ADDRESS_MODEL:
                 return new HashSet<>(Arrays.asList(
                         "id", "user", "street", "city", "area", "buildingNo"
