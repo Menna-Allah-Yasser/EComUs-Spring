@@ -69,6 +69,7 @@ public class SwaggerConfig {
                                 new Tag().name("Admin - Products").description("Admin product management"),
                                 new Tag().name("Admin - Orders").description("Admin order management"),
                                 new Tag().name("Admin - Categories").description("Admin category management"),
+                                new Tag().name( "Admin - statistics").description( "Admin statistics"),
                                 new Tag().name("Customer").description("Customer operations"),
                                 new Tag().name("Customer - Products").description("Customer product browsing"),
                                 new Tag().name("Customer - Orders").description("Customer order management"),
