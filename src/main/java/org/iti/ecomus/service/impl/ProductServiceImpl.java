@@ -7,6 +7,7 @@ import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.dto.ProductDTO;
 import org.iti.ecomus.entity.Category;
 import org.iti.ecomus.entity.Product;
+import org.iti.ecomus.exceptions.BadRequestException;
 import org.iti.ecomus.exceptions.ProductNotFoundException;
 import org.iti.ecomus.mappers.NewProductMapper;
 import org.iti.ecomus.mappers.ProductMapper;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -98,10 +100,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void uploadProductImages(Long productId, MultipartFile[] images) {
+        for (MultipartFile image : images) {
+            String contentType = image.getContentType();
+
+            if (contentType == null || !SUPPORTED_IMAGE_TYPES.contains(contentType)) {
+                throw new BadRequestException("Unsupported file type: " + contentType);
+            }
+        }
         uploader.batchUploadAsync("product",productId, images);
     }
 
+    @Override
+    public boolean deleteProductImage(Long productId, String imageName) {
+        return imageStorageClient.deleteImage("product"+"/"+ productId.toString()+"/"+ imageName);
+    }
 
+    private static final Set<String> SUPPORTED_IMAGE_TYPES = Set.of(
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/webp",
+            "image/bmp",
+            "image/svg+xml",
+            "image/tiff"
+    );
 
     @Override
     public List<String> getProductImages(Long productId) {

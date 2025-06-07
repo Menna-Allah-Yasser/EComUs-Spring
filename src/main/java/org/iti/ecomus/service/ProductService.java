@@ -32,5 +32,7 @@ public interface ProductService {
 
     void uploadProductImages(Long productId, MultipartFile[] images);
 
+    boolean deleteProductImage(Long productId, String imageName);
+
     List<String> getProductImages(Long productId);
 }

@@ -9,4 +9,6 @@ public interface ImageStorageClient {
 
     List<String> getAllImages(String folder, String id);
 
+    boolean deleteImage(String imageName);
+
 }

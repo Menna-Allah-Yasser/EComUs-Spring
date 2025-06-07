@@ -87,6 +87,39 @@ public class ProductAdminController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productId);
     }
 
+    @PostMapping(path = "/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadProductImages(
+            @RequestPart("id") String productIdStr,
+            @RequestPart("images") MultipartFile[] images) {
+        Long productId;
+        try {
+            productId = Long.parseLong(productIdStr);
+            if (productId < 1) {
+                return ResponseEntity.badRequest().build();
+            }
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (images == null || images.length == 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println("Uploading images for product ID: " + productId);
+        productService.uploadProductImages(productId, images);
+        return ResponseEntity.noContent().build();
+    }
+
+
+@DeleteMapping(path = "/{id}/images/{imageName}")
+    public ResponseEntity<Void> deleteProductImage(@PathVariable("id") @Min(1) Long id, @PathVariable("imageName") String imageName) {
+        boolean deleted = productService.deleteProductImage(id, imageName);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping(path = "/{id}/images",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>> getProductImages(@PathVariable("id") @Min(1) Long id) {
         List<String> images = productService.getProductImages(id);

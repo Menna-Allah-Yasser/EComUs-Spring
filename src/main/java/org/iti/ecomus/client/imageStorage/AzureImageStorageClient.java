@@ -74,6 +74,29 @@ public class AzureImageStorageClient implements ImageStorageClient{
                 .toList();
     }
 
+
+    @Override
+    public boolean deleteImage(String imageName) {
+        try {
+            BlobContainerClient blobContainerClient = blobServiceClient.getBlobContainerClient(container);
+            BlobClient blobClient = blobContainerClient.getBlobClient(imageName);
+
+            if (blobClient.exists()) {
+                blobClient.delete();
+                log.info("Successfully deleted image: {}", imageName);
+                return true;
+            } else {
+                log.warn("Attempted to delete non-existing image: {}", imageName);
+                return false;
+            }
+        } catch (BlobStorageException e) {
+            log.error("Failed to delete image from Azure Blob Storage: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Unexpected error during image deletion: " + e.getMessage(), e);
+        }
+        return false;
+    }
+
     private String getContentType(String fileName) {
         String extension = getFileExtension(fileName).toLowerCase();
         switch (extension) {
