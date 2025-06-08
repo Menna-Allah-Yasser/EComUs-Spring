@@ -49,6 +49,8 @@ public class CategoryService {
             throw new ConflictException("Category name already exists");
         }
         Category category = categoryMapper.toCategory(dto);
+
+        category.setCategoryId(null);
         category.setCategoryName(trimmedName);
         Category saved = categoryRepo.save(category);
         return categoryMapper.toCategoryDTO(saved);
