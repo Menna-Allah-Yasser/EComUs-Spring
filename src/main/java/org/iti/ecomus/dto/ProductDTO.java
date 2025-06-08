@@ -29,4 +29,9 @@ public class ProductDTO {
     private BigDecimal price;
 
     private List<CategoryNoProductDTO> categories;
+
+    private List<String> images;
+
+    public <T> ProductDTO(long l, String sampleProduct, String sampleDescription, int i, BigDecimal bigDecimal, List<T> sampleCategory) {
+    }
 }

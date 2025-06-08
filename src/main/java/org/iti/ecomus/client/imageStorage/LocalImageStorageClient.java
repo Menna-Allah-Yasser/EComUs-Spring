@@ -46,7 +46,7 @@ public class LocalImageStorageClient implements ImageStorageClient {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
             for (Path entry : stream) {
                 if (Files.isRegularFile(entry)) {
-                    imageList.add(entry.getFileName().toString());
+                    imageList.add(folder + "/" + id + "/" +entry.getFileName().toString());
                 }
             }
         } catch (IOException e) {
