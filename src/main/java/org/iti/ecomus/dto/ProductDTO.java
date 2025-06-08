@@ -32,6 +32,8 @@ public class ProductDTO {
 
     private List<String> images;
 
+    private Long purchaseCount;
+
     public <T> ProductDTO(long l, String sampleProduct, String sampleDescription, int i, BigDecimal bigDecimal, List<T> sampleCategory) {
     }
 }
