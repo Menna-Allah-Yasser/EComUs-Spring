@@ -121,7 +121,7 @@ public interface OrderRepo extends JpaRepository<Order, Long>, SearchRepository<
     SELECT COUNT(*) as totalUsers,
            COUNT(*) as totalOrders,
            COALESCE(SUM(o.price), 0) as totalRevenue,
-           COUNT(CASE WHEN o.status = 'PENDING' THEN 1 END) as pendingOrders,
+           COUNT(CASE WHEN o.status = 'PROCESSING' THEN 1 END) as pendingOrders,
            COUNT(CASE WHEN CAST(o.date AS DATE) = CURRENT_DATE THEN 1 END) as todayOrders,
            COALESCE(SUM(CASE WHEN CAST(o.date AS DATE) = CURRENT_DATE THEN o.price ELSE 0 END), 0) as todayRevenue,
            0 as newCustomersThisMonth,

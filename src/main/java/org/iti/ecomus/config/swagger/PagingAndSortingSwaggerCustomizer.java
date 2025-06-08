@@ -123,7 +123,7 @@ public class PagingAndSortingSwaggerCustomizer implements OperationCustomizer {
         operation.addParametersItem(createParameter("orderIdMax", "integer", "Filter by order ID MAX", null, false));
         operation.addParametersItem(createParameter("orderIdMin", "integer", "Filter by order ID MIN", null, false));
         operation.addParametersItem(createParameter("address", "string", "Filter by address", null, false));
-        Parameter status = createParameter("OrderStatus", "string", "Filter by OrderStatus", null, false);
+        Parameter status = createParameter("status", "string", "Filter by OrderStatus", null, false);
         status.getSchema().setEnum(Arrays.asList(OrderStatus.CANCELED,
                 OrderStatus.COMPLETED, OrderStatus.PROCESSING, OrderStatus.SHIPPED));
         operation.addParametersItem(status);

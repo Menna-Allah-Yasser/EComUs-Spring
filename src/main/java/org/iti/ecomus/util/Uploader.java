@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -33,19 +34,30 @@ public class Uploader {
 
         List<CompletableFuture<Void>> uploadFutures = Arrays.stream(images)
                 .filter(image -> !image.isEmpty())
-                .map(image -> CompletableFuture.runAsync(() -> {
-                    try (InputStream is = image.getInputStream()) {
-                        imageStorageClient.uploadImage(
-                                prefix + image.getOriginalFilename(),
-                                is,
-                                image.getSize()
-                        );
-                        log.info("Successfully uploaded: {}", image.getOriginalFilename());
+                .map(image -> {
+                    try {
+                        byte[] bytes = image.getBytes();
+                        String filename = image.getOriginalFilename();
+                        long size = image.getSize();
+
+                        return  CompletableFuture.runAsync(() -> {
+                            try (InputStream is = new ByteArrayInputStream(bytes)) {
+                                imageStorageClient.uploadImage(
+                                        prefix + filename,
+                                        is,
+                                        size
+                                );
+                                log.info("Successfully uploaded: {}", filename);
+                            } catch (IOException e) {
+                                log.error("Failed to upload image: {}", filename, e);
+                            }
+                        }, imageUploadExecutor);
+
                     } catch (IOException e) {
-                        log.error("Failed to upload image: {}", image.getOriginalFilename(), e);
-                        // Don't throw exception in background task
+                        log.error("Failed to read image in main thread", e);
+                        return CompletableFuture.completedFuture((Void) null); // Skip broken image
                     }
-                }, imageUploadExecutor))
+                })
                 .collect(Collectors.toList());
 
         // Wait for all uploads in background

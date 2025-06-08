@@ -39,6 +39,7 @@ public class TokenGenerator {
                 .claim("roles", user.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .toList())
+                .claim("name", user.getUserName())
                 .build();
 
         return accessTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();

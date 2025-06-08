@@ -12,6 +12,7 @@ import java.util.List;
 public interface OrderMapper {
 
     @Mapping(target = "userId", source = "user.userId")
+    @Mapping(target = "userName", source = "user.userName")
     OrderDTO toOrderDTO(Order order);
     Order toOrder(OrderDTO orderDTO);
 

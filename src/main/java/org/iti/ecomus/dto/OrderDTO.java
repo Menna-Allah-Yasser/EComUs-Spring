@@ -30,4 +30,6 @@ public class OrderDTO {
     private List<OrderDetailsDTO> orderDetails;
 
     private Long userId;
+
+    private String userName;
 }
