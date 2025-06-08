@@ -100,7 +100,8 @@ public class PagingAndSortingSwaggerCustomizer implements OperationCustomizer {
 
         operation.addParametersItem(createParameter("job", "string", "Filter by job", null, false));
         operation.addParametersItem(createParameter("phone", "string", "Filter by phone number", null, false));
-        operation.addParametersItem(createParameter("creditLimit", "number", "Filter by credit limit", null, false));
+        operation.addParametersItem(createParameter("creditLimitMin", "number", "Filter by credit minim limit", null, false));
+        operation.addParametersItem(createParameter("creditLimitMax", "number", "Filter by credit maximum limit", null, false));
     }
 
     private void addProductSearchParameters(Operation operation) {

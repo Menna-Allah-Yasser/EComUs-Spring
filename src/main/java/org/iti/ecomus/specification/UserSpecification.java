@@ -96,11 +96,18 @@ public class UserSpecification {
                                     "%" + value.toString().toLowerCase() + "%"
                             ));
                             break;
-                        case "creditLimit":
+                        case "creditLimitMin":
                             try {
                                 BigDecimal creditLimit = new BigDecimal(value.toString());
-                            System.out.println("Credit Limit: " + creditLimit);
-                                predicates.add(criteriaBuilder.equal(root.get("creditLimit"), criteriaBuilder.literal(creditLimit)));
+                                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("creditLimit"), criteriaBuilder.literal(creditLimit)));
+                            } catch (NumberFormatException e) {
+                                log.error(e.getMessage());
+                            }
+                            break;
+                            case "creditLimitMax":
+                            try {
+                                BigDecimal creditLimit = new BigDecimal(value.toString());
+                                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("creditLimit"), criteriaBuilder.literal(creditLimit)));
                             } catch (NumberFormatException e) {
                                 log.error(e.getMessage());
                             }
