@@ -107,12 +107,8 @@ public class ProductSpecification {
                             }
                             break;
                         case "quantityMax":
-                            if (value instanceof Integer) {
                                 Integer v = Integer.valueOf(value.toString());
                                 predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("quantity"), v));
-                            } else {
-                                log.error("Invalid value for quantityMax: " + value);
-                            }
                             break;
                         case "categoryName":
                             try {
