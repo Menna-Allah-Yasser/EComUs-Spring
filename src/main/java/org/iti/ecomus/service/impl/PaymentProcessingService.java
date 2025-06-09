@@ -42,13 +42,13 @@ public class PaymentProcessingService {
             throw new InsufficientCreditException("Please update your profile to set your credit card limit.");
         }
 
-        if (totalPrice.compareTo(creditLimit)== 1) {
+        if (totalPrice.compareTo(creditLimit) > 0) {
             throw new InsufficientCreditException(
-                    String.format("Your order total ($%d) exceeds your available credit limit ($%d).",
-                            totalPrice, creditLimit));
+                    String.format("Your order total ($%s) exceeds your available credit limit ($%s).",
+                            totalPrice.toString(), creditLimit.toString()));
         }
 
-        user.setCreditLimit(creditLimit.subtract( totalPrice));
+        user.setCreditLimit(creditLimit.subtract(totalPrice));
         userRepo.save(user);
     }
 }
