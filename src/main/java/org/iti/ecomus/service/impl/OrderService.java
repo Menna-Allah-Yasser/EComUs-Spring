@@ -1,5 +1,6 @@
 package org.iti.ecomus.service.impl;
 
+import jakarta.validation.constraints.Min;
 import org.iti.ecomus.dto.CheckOutOrderDTO;
 import org.iti.ecomus.dto.OrderDTO;
 import org.iti.ecomus.dto.PagedResponse;
@@ -7,6 +8,7 @@ import org.iti.ecomus.dto.UserDTO;
 import org.iti.ecomus.entity.Order;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.enums.OrderStatus;
+import org.iti.ecomus.exceptions.BadRequestException;
 import org.iti.ecomus.exceptions.OrderNotFoundException;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.OrderMapper;
@@ -104,4 +106,18 @@ public class OrderService {
         checkoutService.processCheckout(userId,checkoutRequest));
     }
 
+    @Transactional
+    public OrderDTO cancelOrder(Long id,Long userId) {
+        Order order = orderRepo.findById(id).orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
+
+        if(!order.getUser().getUserId().equals(userId)){
+            throw new BadRequestException("You are not authorized to cancel this order");
+        }
+        if(order.getStatus() != OrderStatus.PROCESSING){
+            throw new BadRequestException("Order cannot be canceled");
+        }
+
+        return orderMapper.toOrderDTO(
+        orderManagementService.updateOrderStatus(id, OrderStatus.CANCELED));
+    }
 }

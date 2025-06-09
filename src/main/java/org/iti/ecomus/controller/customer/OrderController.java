@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Min;
 import org.iti.ecomus.config.AppConstants;
 import org.iti.ecomus.dto.CheckOutOrderDTO;
 import org.iti.ecomus.dto.OrderDTO;
+import org.iti.ecomus.dto.OrderStatusDTO;
 import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.paging.PagingAndSortingHelper;
@@ -60,6 +61,12 @@ public class OrderController {
     public ResponseEntity<OrderDTO> createOrder(@AuthenticationPrincipal User user, @RequestBody @Valid CheckOutOrderDTO orderDTO) {
         OrderDTO createdOrder = orderService.createOrder(user.getUserId(), orderDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+    }
+
+    @PostMapping(path = "/{id}/cancel",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<OrderDTO> cancelOrder(@AuthenticationPrincipal User user, @PathVariable("id") @Min(1) Long id) {
+        OrderDTO updatedOrder = orderService.cancelOrder(id,user.getUserId());
+        return ResponseEntity.ok(updatedOrder);
     }
 
 }
