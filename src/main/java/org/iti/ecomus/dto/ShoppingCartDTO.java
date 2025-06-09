@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShoppingCartDTO {
-    @NotBlank(message = "Product ID must be provided")
+    @NotNull(message = "Product ID must be provided")
     @Min(value = 1, message = "Product ID must be positive")
     private Long productId;
     @Min(value = 1, message = "Quantity must be at least 1")
