@@ -19,7 +19,7 @@ public class ProductSpecification {
     public static Specification<Product> containsKeyword(String keyword) {
         return (root, query, criteriaBuilder) -> {
             if (keyword == null || keyword.trim().isEmpty()) return null;
-
+            query.distinct(true);
             Join<Product, Category> categoryJoin = root.join("categories");
 
             String likePattern = "%" + keyword.toLowerCase() + "%";
@@ -32,8 +32,8 @@ public class ProductSpecification {
     }
     public static Specification<Product> build(String keyword, Map<String, Object> searchParams) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             List<Predicate> predicates = new ArrayList<>();
-
             // Add keyword search
             if (keyword != null && !keyword.trim().isEmpty()) {
                 Specification<Product> keywordSpec = containsKeyword(keyword);
