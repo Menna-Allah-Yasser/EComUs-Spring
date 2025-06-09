@@ -7,7 +7,7 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring" , uses = {ProductMapper.class, UserMapper.class})
+@Mapper(componentModel = "spring" , uses = {ProductMapper.class, UserMapper.class, ImageMappingHelper.class})
 public interface WishlistMapper {
     @Mapping(source = "user.userId", target = "userId")
     @Mapping(source = "product.productId", target = "productId")
@@ -22,6 +22,7 @@ public interface WishlistMapper {
     List<Wishlist> toEntityList(List<WishlistDTO> dtos);
 
     @Mapping(target = ".",source = "product")
+    @Mapping(target = "images", source = "product")
     ProductDTO wishlistToProductDTO(Wishlist wishlist);
 
 
