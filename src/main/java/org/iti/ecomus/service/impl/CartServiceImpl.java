@@ -8,6 +8,7 @@ import org.iti.ecomus.dto.PagedResponse;
 import org.iti.ecomus.entity.Cart;
 import org.iti.ecomus.entity.Product;
 import org.iti.ecomus.entity.User;
+import org.iti.ecomus.exceptions.InsufficientInventoryException;
 import org.iti.ecomus.exceptions.ProductNotFoundException;
 import org.iti.ecomus.exceptions.ResourceNotFoundException;
 import org.iti.ecomus.mappers.CartMapper;
@@ -68,6 +69,9 @@ public CartDTO addOrUpdateCartItem(Long userId, Long productId, int quantity) {
     User user = userRepo.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     Product product = productRepo.findById(productId).orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
+    if (product.getQuantity() < quantity) {
+        throw new InsufficientInventoryException("Insufficient inventory for product: " + product.getProductName());
+    }
     Cart cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
     if (cart == null) {
         cart = new Cart();
