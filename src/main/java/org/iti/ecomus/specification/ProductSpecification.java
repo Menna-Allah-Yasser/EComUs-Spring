@@ -112,10 +112,30 @@ public class ProductSpecification {
                             break;
                         case "categoryName":
                             try {
+                                String categoryNamesStr = value.toString();
+                                if (categoryNamesStr.contains(",")) {
+                                    // Handle multiple category names
+                                    String[] categoryNames = categoryNamesStr.split(",");
+                                    List<Predicate> categoryPredicates = new ArrayList<>();
+                                    
+                                    for (String categoryName : categoryNames) {
+                                        if (categoryName != null && !categoryName.trim().isEmpty()) {
+                                            categoryPredicates.add(criteriaBuilder.like(
+                                                    criteriaBuilder.lower(categoryJoin.get("categoryName")),
+                                                    "%" + categoryName.trim().toLowerCase() + "%"));
+                                        }
+                                    }
+                                    
+                                    if (!categoryPredicates.isEmpty()) {
+                                        predicates.add(criteriaBuilder.or(
+                                                categoryPredicates.toArray(new Predicate[0])));
+                                    }
+                                } else {
 
-                                predicates.add(criteriaBuilder.like(
-                                        criteriaBuilder.lower(categoryJoin.get("categoryName")),
-                                        "%" + value.toString().toLowerCase() + "%"));
+                                    predicates.add(criteriaBuilder.like(
+                                            criteriaBuilder.lower(categoryJoin.get("categoryName")),
+                                            "%" + value.toString().toLowerCase() + "%"));
+                                }
                             } catch (IllegalArgumentException e) {
                                 log.error(e.getMessage());
                             }

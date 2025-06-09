@@ -18,6 +18,7 @@ public class UserSpecification {
 
     public static Specification<User> containsKeyword(String keyword) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             if (keyword == null || keyword.trim().isEmpty()) return null;
 
             String likePattern = "%" + keyword.toLowerCase() + "%";
@@ -34,6 +35,7 @@ public class UserSpecification {
 
     public static Specification<User> build(String keyword, Map<String, Object> searchParams) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             List<Predicate> predicates = new ArrayList<>();
 
             // Add keyword search

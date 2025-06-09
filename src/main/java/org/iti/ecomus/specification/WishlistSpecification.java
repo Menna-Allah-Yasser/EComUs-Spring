@@ -19,6 +19,7 @@ public class WishlistSpecification {
 
     public static Specification<Wishlist> containsKeyword(String keyword) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             if (keyword == null || keyword.trim().isEmpty()) return null;
 
 
@@ -37,6 +38,7 @@ public class WishlistSpecification {
 
     public static Specification<Wishlist> build(String keyword, Map<String, Object> searchParams) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             List<Predicate> predicates = new ArrayList<>();
 
             // Add keyword search

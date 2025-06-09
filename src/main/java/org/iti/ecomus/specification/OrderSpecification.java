@@ -21,6 +21,7 @@ public class OrderSpecification {
 
     public static Specification<Order> containsKeyword(String keyword) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             if (keyword == null || keyword.trim().isEmpty()) return null;
 
 
@@ -35,6 +36,7 @@ public class OrderSpecification {
 
     public static Specification<Order> build(String keyword, Map<String, Object> searchParams) {
         return (root, query, criteriaBuilder) -> {
+            query.distinct(true);
             List<Predicate> predicates = new ArrayList<>();
 
             // Add keyword search
