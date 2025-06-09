@@ -38,10 +38,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(user, userDTO));
     }
 
-    @PutMapping(path = "/profile/password", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updatePassword(@AuthenticationPrincipal User user,@Valid ChangePasswordDTO changePasswordDTO) {
+    @PutMapping(path = "/profile/password")
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal User user,@Valid ChangePasswordDTO changePasswordDTO) {
         userService.updatePassword(changePasswordDTO);
-        return ResponseEntity.ok("Password updated successfully");
+        return ResponseEntity.noContent().build();
     }
 
 }
