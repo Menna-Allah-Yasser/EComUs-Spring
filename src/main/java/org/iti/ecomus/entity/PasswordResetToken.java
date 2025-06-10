@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "password_reset_token")
+@Table(name = "passwordresettoken")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,7 +22,7 @@ public class PasswordResetToken {
     private String token;
     
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "userId", nullable = false)
     private User user;
     
     @Column(nullable = false)

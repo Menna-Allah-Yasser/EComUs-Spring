@@ -79,7 +79,7 @@ public class MailMessenger {
     @Async("emailTaskExecutor")
     public void sendresetPassword(String userEmail, String token){
         String subject = "Reset Your Password - Ecommus";
-        String resetLink = "http://localhost:8080/customer/reset-password.jsp?token=" + token;
+        String resetLink = "http://localhost:4200/password-reset?token=" + token;
 
         // Construct the email body with the reset link
         String body = "Hi,<p>You have requested to reset your password for your Ecommus account.</p>"
