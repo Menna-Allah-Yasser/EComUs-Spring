@@ -1,0 +1,1 @@
+update user set password = '$2a$10$mq4z/Gf3ANu/Spm0sjkUxuli81v86yMmTleHu2PIlEe8aettb1U0a';
