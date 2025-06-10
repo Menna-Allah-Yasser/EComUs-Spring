@@ -59,9 +59,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDTO getCartItem(Long userId, Long productId) {
         Cart cart = cartRepo.findByUserUserIdAndProductProductId(userId, productId);
-        if (cart == null){
-            throw new ResourceNotFoundException("Cart item not found for userId: " + userId + " and productId: " + productId);
-        }
+//        if (cart == null){
+//            throw new ResourceNotFoundException("Cart item not found for userId: " + userId + " and productId: " + productId);
+//        }
         return cartMapper.toCartDTO(cart);
     }
 @Override
