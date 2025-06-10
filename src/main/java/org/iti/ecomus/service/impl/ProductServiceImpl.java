@@ -52,12 +52,10 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private Uploader uploader;
 
-    @Transactional
     @Override
     public ProductDTO getProductById(Long productId){
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
-        em.refresh(product);
         return productMapper.toProductDTO(product);
     }
 
