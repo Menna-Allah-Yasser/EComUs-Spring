@@ -13,10 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/public/users")
@@ -34,12 +31,12 @@ public class UserController {
     }
 
     @PutMapping(path = "/profile",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> updateProfile(@AuthenticationPrincipal User user,@Valid UpdateProfileDTO userDTO) {
+    public ResponseEntity<UserDTO> updateProfile(@AuthenticationPrincipal User user,@Valid @RequestBody UpdateProfileDTO userDTO) {
         return ResponseEntity.ok(userService.updateUser(user, userDTO));
     }
 
     @PutMapping(path = "/profile/password")
-    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal User user,@Valid ChangePasswordDTO changePasswordDTO) {
+    public ResponseEntity<Void> updatePassword(@AuthenticationPrincipal User user,@Valid @RequestBody ChangePasswordDTO changePasswordDTO) {
         userService.updatePassword(changePasswordDTO);
         return ResponseEntity.noContent().build();
     }
