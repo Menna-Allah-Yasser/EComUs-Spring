@@ -1,5 +1,6 @@
 package org.iti.ecomus.service.impl;
 
+import jakarta.persistence.*;
 import lombok.extern.slf4j.Slf4j;
 import org.iti.ecomus.client.imageStorage.ImageStorageClient;
 import org.iti.ecomus.dto.NewProductDTO;
@@ -30,6 +31,8 @@ import java.util.Set;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
 
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     private ProductRepo productRepo;
@@ -49,10 +52,12 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private Uploader uploader;
 
+    @Transactional
     @Override
     public ProductDTO getProductById(Long productId){
         Product product = productRepo.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
+        em.refresh(product);
         return productMapper.toProductDTO(product);
     }
 
