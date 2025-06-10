@@ -5,6 +5,7 @@ import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.iti.ecomus.paging.PagingAndSortingArgumentResolver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +13,39 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    @Value("${local.image.storage.path}")
+    private String uploadDir;
+
+    @Value("${local.image.base.url:/}")
+    private String imageBaseUrl;
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Map the base URL to the physical directory
+        Path uploadPath = Paths.get(uploadDir);
+        String absolutePath = uploadPath.toFile().getAbsolutePath();
+        
+
+        registry.addResourceHandler("/**")
+                .addResourceLocations("file:/" + absolutePath + "/");
+
+        System.out.println("Serving static resources from: " + absolutePath);
+    }
 
         @Override
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {

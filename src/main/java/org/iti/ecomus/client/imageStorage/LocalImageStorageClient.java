@@ -20,6 +20,9 @@ public class LocalImageStorageClient implements ImageStorageClient {
 
     @Value("${local.image.storage.path:uploads}")
     private String rootDir;
+    
+    @Value("${local.image.base.url:/images}")
+    private String baseUrl;
 
     @Override
     public String uploadImage(String originalImageName, InputStream data, long length) throws IOException {
@@ -33,7 +36,8 @@ public class LocalImageStorageClient implements ImageStorageClient {
             data.transferTo(out);
         }
 
-        return file.getAbsolutePath(); // You can return a public URL if hosted
+        // Return a web-accessible URL instead of file path
+        return baseUrl + "/" + originalImageName;
     }
 
     @Override
@@ -46,7 +50,9 @@ public class LocalImageStorageClient implements ImageStorageClient {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
             for (Path entry : stream) {
                 if (Files.isRegularFile(entry)) {
-                    imageList.add(folder + "/" + id + "/" +entry.getFileName().toString());
+                    // Return web URLs instead of file paths
+                    String relativePath = folder + "/" + id + "/" + entry.getFileName().toString();
+                    imageList.add(baseUrl + "/" + relativePath);
                 }
             }
         } catch (IOException e) {
