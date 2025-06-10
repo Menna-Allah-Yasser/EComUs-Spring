@@ -55,4 +55,16 @@ public class UserServiceImpl implements UserService {
         return userManager.updateUserProfile(user, profileDTO);
     }
 
+    public String requestPasswordReset(String email) {
+        return userManager.generatePasswordResetToken(email);
+    }
+
+    public boolean validateResetToken(String token) {
+        return userManager.validatePasswordResetToken(token);
+    }
+
+    public boolean resetPassword(PasswordResetDTO resetDTO) {
+        return userManager.resetPassword(resetDTO.getToken(), resetDTO.getNewPassword());
+    }
+
 }

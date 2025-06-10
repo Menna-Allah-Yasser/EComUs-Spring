@@ -3,9 +3,7 @@ package org.iti.ecomus.controller.customer;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.iti.ecomus.dto.ChangePasswordDTO;
-import org.iti.ecomus.dto.UpdateProfileDTO;
-import org.iti.ecomus.dto.UserDTO;
+import org.iti.ecomus.dto.*;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +38,6 @@ public class UserController {
         userService.updatePassword(changePasswordDTO);
         return ResponseEntity.noContent().build();
     }
+
 
 }

@@ -78,18 +78,20 @@ public class MailMessenger {
 
     @Async("emailTaskExecutor")
     public void sendresetPassword(String userEmail, String token){
-        String subject = "Reset Password";
+        String subject = "Reset Your Password - Ecommus";
         String resetLink = "http://localhost:8080/customer/reset-password.jsp?token=" + token;
 
         // Construct the email body with the reset link
-        String body = "Hi, <br><br>"
-                + "Please use the link below to reset your password:<br>"
-                + "<a href=\"" + resetLink + "\">Reset Password</a><br><br>"
-                + "If you didn't request a password reset, please ignore this email.";
+        String body = "Hi,<p>You have requested to reset your password for your Ecommus account.</p>"
+                + "<p>Please click the link below to reset your password:</p>"
+                + "<p><a href=\"" + resetLink + "\">Reset Password</a></p>"
+                + "<p>This link will expire in 24 hours.</p>"
+                + "<p>If you didn't request a password reset, please ignore this email or contact support if you have concerns.</p>"
+                + "<p>Thank you,<br>The Ecommus Team</p>";
         try {
             Mail.sendSimpleEmail(userEmail, subject, body);
         } catch (Exception e) {
-            log.error(e.getMessage(),e.getClass());
+            log.error(e.getMessage(), e.getClass());
         }
     }
 

@@ -7,10 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.iti.ecomus.config.AppConstants;
+import org.iti.ecomus.dto.PasswordResetDTO;
+import org.iti.ecomus.dto.PasswordResetRequestDTO;
 import org.iti.ecomus.dto.UserSignInDTO;
 import org.iti.ecomus.dto.UserSignUpDTO;
 import org.iti.ecomus.exceptions.UnauthorizedException;
 import org.iti.ecomus.mappers.UserMapper;
+import org.iti.ecomus.service.impl.UserServiceImpl;
 import org.iti.ecomus.util.MailMessenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,10 +26,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.iti.ecomus.entity.User;
 
 import java.util.Arrays;
@@ -51,6 +51,9 @@ public class AuthController {
 
     @Autowired
     private MailMessenger mailMessenger;
+
+    @Autowired
+    private UserServiceImpl userService;
 
 
     @PostMapping(path = "/register", produces = "application/json")
@@ -126,6 +129,32 @@ public class AuthController {
         response.addCookie(cookie);
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody @Valid PasswordResetRequestDTO requestDTO) {
+        String token = userService.requestPasswordReset(requestDTO.getEmail());
+        // We don't return the token for security reasons
+        // The token is sent via email
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/reset-password/validate")
+    public ResponseEntity<Boolean> validateResetToken(@RequestParam String token) {
+        boolean valid = userService.validateResetToken(token);
+        return ResponseEntity.ok(valid);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid PasswordResetDTO resetDTO) {
+        boolean success = userService.resetPassword(resetDTO);
+
+        if (!success) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+
     // Helper method to extract refresh token from cookie
     private String getRefreshTokenFromCookie(HttpServletRequest request) {
         if (request.getCookies() == null) {
@@ -149,5 +178,6 @@ public class AuthController {
         cookie.setMaxAge(0); // Expire immediately
         response.addCookie(cookie);
     }
+
 
 }

@@ -3,11 +3,14 @@ package org.iti.ecomus.config.security;
 import org.iti.ecomus.dto.UpdateProfileDTO;
 import org.iti.ecomus.dto.UserDTO;
 import org.iti.ecomus.dto.UserSignUpDTO;
+import org.iti.ecomus.entity.PasswordResetToken;
 import org.iti.ecomus.entity.User;
 import org.iti.ecomus.exceptions.BadRequestException;
 import org.iti.ecomus.exceptions.ConflictException;
 import org.iti.ecomus.mappers.UserMapper;
+import org.iti.ecomus.repository.PasswordResetTokenRepo;
 import org.iti.ecomus.repository.UserRepo;
+import org.iti.ecomus.util.MailMessenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class UserManager implements UserDetailsManager {
@@ -30,6 +35,12 @@ public class UserManager implements UserDetailsManager {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PasswordResetTokenRepo passwordResetTokenRepo;
+
+    @Autowired
+    private MailMessenger mailMessenger;
 
     @Override
     public void createUser(UserDetails userDetails) {
@@ -125,4 +136,70 @@ public class UserManager implements UserDetailsManager {
         return userOptional.get();
     }
 
+    public void createPasswordResetTokenForUser(User user, String token) {
+        // Delete any existing tokens for this user
+        passwordResetTokenRepo.deleteByUserUserId(user.getUserId());
+        
+        // Create new token
+        PasswordResetToken myToken = new PasswordResetToken();
+        myToken.setToken(token);
+        myToken.setUser(user);
+        myToken.setExpiryDate(LocalDateTime.now().plusHours(24)); // Token valid for 24 hours
+        
+        passwordResetTokenRepo.save(myToken);
+    }
+
+    public String generatePasswordResetToken(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            // Don't reveal that the email doesn't exist for security reasons
+            return null;
+        }
+        
+        User user = userOpt.get();
+        String token = UUID.randomUUID().toString();
+        createPasswordResetTokenForUser(user, token);
+        
+        // Send email with reset link
+        mailMessenger.sendresetPassword(user.getEmail(), token);
+        
+        return token;
+    }
+
+    public boolean validatePasswordResetToken(String token) {
+        Optional<PasswordResetToken> tokenOpt = passwordResetTokenRepo.findByToken(token);
+        
+        if (tokenOpt.isEmpty()) {
+            return false;
+        }
+        
+        PasswordResetToken resetToken = tokenOpt.get();
+        
+        if (resetToken.isExpired() || resetToken.isUsed()) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        Optional<PasswordResetToken> tokenOpt = passwordResetTokenRepo.findByToken(token);
+        
+        if (tokenOpt.isEmpty() || tokenOpt.get().isExpired() || tokenOpt.get().isUsed()) {
+            return false;
+        }
+        
+        PasswordResetToken resetToken = tokenOpt.get();
+        User user = resetToken.getUser();
+        
+        // Update password
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        
+        // Mark token as used
+        resetToken.setUsed(true);
+        passwordResetTokenRepo.save(resetToken);
+        
+        return true;
+    }
 }
