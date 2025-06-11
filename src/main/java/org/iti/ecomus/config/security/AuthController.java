@@ -17,6 +17,7 @@ import org.iti.ecomus.service.impl.UserServiceImpl;
 import org.iti.ecomus.util.MailMessenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -122,7 +123,7 @@ public class AuthController {
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);  // Cannot be accessed by JavaScript
-        cookie.setSecure(true);    // Only sent over HTTPS
+        cookie.setSecure(false);    // Only sent over HTTPS
         cookie.setPath("/api/auth"); // Only sent to auth endpoints
         cookie.setMaxAge(AppConstants.JWT_Refresh_TOKEN_VALIDITY); // 30 days in seconds
 //        cookie.setSameSite(Cookie.SameSite.STRICT); // CSRF protection
@@ -137,7 +138,7 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/reset-password/validate")
+    @GetMapping(path = "/reset-password/validate", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Boolean> validateResetToken(@RequestParam String token) {
         boolean valid = userService.validateResetToken(token);
         return ResponseEntity.ok(valid);
