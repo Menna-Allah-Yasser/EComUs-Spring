@@ -122,7 +122,7 @@ public class AuthController {
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);  // Cannot be accessed by JavaScript
-        cookie.setSecure(true);    // Only sent over HTTPS
+        cookie.setSecure(false);    // Only sent over HTTPS
         cookie.setPath("/api/auth"); // Only sent to auth endpoints
         cookie.setMaxAge(AppConstants.JWT_Refresh_TOKEN_VALIDITY); // 30 days in seconds
 //        cookie.setSameSite(Cookie.SameSite.STRICT); // CSRF protection
