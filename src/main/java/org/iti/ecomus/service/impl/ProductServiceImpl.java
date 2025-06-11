@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -103,14 +104,43 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void uploadProductImages(Long productId, MultipartFile[] images) {
+        // Validate image types first
         for (MultipartFile image : images) {
-            String contentType = image.getContentType();
+            if (image == null || image.isEmpty()) {
+                continue;
+            }
 
+            String contentType = image.getContentType();
             if (contentType == null || !SUPPORTED_IMAGE_TYPES.contains(contentType)) {
                 throw new BadRequestException("Unsupported file type: " + contentType);
             }
         }
-        uploader.batchUploadAsync("product",productId, images);
+
+        // Create a list to store image data
+        List<Uploader.ImageData> imageDataList = new ArrayList<>();
+
+        // Read all image data immediately
+        for (MultipartFile image : images) {
+            if (image == null || image.isEmpty()) {
+                continue;
+            }
+
+            try {
+                byte[] bytes = image.getBytes();
+                if (bytes.length > 0) {
+                    imageDataList.add(new Uploader.ImageData(
+                        image.getOriginalFilename(),
+                        bytes,
+                        image.getSize()
+                    ));
+                }
+            } catch (IOException e) {
+                log.error("Failed to read image: {}", image.getOriginalFilename(), e);
+            }
+        }
+
+        // Pass the pre-read image data to the uploader
+        uploader.batchUploadAsync("product", productId, imageDataList);
     }
 
     @Override

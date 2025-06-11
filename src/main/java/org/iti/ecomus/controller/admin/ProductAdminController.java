@@ -83,6 +83,7 @@ public class ProductAdminController {
         }
 
         ProductDTO productId = productService.addProductWithCategories(product);
+        System.out.println(images.length);
         productService.uploadProductImages(productId.getProductId(), images);
         return ResponseEntity.status(HttpStatus.CREATED).body(productId);
     }
